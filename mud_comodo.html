@@ -148,11 +148,19 @@
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label for="roteador">Roteador</label>
-                                <input type="text" id="roteador" placeholder="Modelo / Marca" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                <select id="roteador" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 bg-white text-sm">
+                                    <option value="">Selecione...</option>
+                                    <option value="Comodato">Comodato</option>
+                                    <option value="Compra">Compra</option>
+                                </select>
                             </div>
                             <div>
                                 <label for="onu">ONU</label>
-                                <input type="text" id="onu" placeholder="Modelo / Marca" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                <select id="onu" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 bg-white text-sm">
+                                    <option value="">Selecione...</option>
+                                    <option value="Comodato">Comodato</option>
+                                    <option value="Compra">Compra</option>
+                                </select>
                             </div>
                             <div>
                                 <label for="contato">Contato</label>
@@ -171,24 +179,33 @@
                         </h2>
                         
                         <div class="mb-4">
-                            <label for="solicitacao" class="font-semibold text-gray-700">Solicitação (Fixo)</label>
-                            <input type="text" id="solicitacao" value="MUDANÇA DE COMODO" readonly class="w-full p-2 border border-gray-300 bg-gray-100 rounded text-sm font-bold text-gray-600 cursor-not-allowed">
+                            <label for="solicitacao" class="font-semibold text-gray-700">Solicitação</label>
+                            <input type="text" id="solicitacao" value="MUDANÇA DE COMODO" class="w-full p-2 border border-gray-300 rounded focus:ring-orange-500 focus:border-orange-500 text-sm">
                         </div>
 
                         <div class="p-4 bg-orange-50 border border-orange-100 rounded">
-                            <span class="block text-sm font-medium text-gray-800 mb-2">Cliente ciente que poderá ser gerado custo?</span>
-                            <div class="flex gap-4">
-                                <label class="flex items-center gap-2 cursor-pointer text-sm bg-white px-3 py-1.5 rounded border hover:bg-gray-50 transition">
-                                    <input type="radio" name="cienteCusto" value="Sim" onchange="toggleAlertCusto(false)" checked class="text-orange-600 focus:ring-orange-500"> Sim
-                                </label>
-                                <label class="flex items-center gap-2 cursor-pointer text-sm bg-white px-3 py-1.5 rounded border hover:bg-gray-50 transition">
-                                    <input type="radio" name="cienteCusto" value="Não" onchange="toggleAlertCusto(true)" class="text-orange-600 focus:ring-orange-500"> Não
-                                </label>
+                            <div class="mb-3">
+                                <span class="block text-sm font-medium text-gray-800 mb-2">Cliente será isento do custo?</span>
+                                <div class="flex gap-4">
+                                    <label class="flex items-center gap-2 cursor-pointer text-sm bg-white px-3 py-1.5 rounded border hover:bg-gray-50 transition">
+                                        <input type="radio" name="isentoCusto" value="Sim" onchange="toggleCusto(true)" class="text-orange-600 focus:ring-orange-500"> Sim
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer text-sm bg-white px-3 py-1.5 rounded border hover:bg-gray-50 transition">
+                                        <input type="radio" name="isentoCusto" value="Não" onchange="toggleCusto(false)" checked class="text-orange-600 focus:ring-orange-500"> Não
+                                    </label>
+                                </div>
                             </div>
-                            
-                            <div id="alert-custo" class="hidden mt-3 p-3 bg-red-100 border-l-4 border-red-500 text-red-800 text-sm animate-fade-in flex items-start gap-2">
-                                <i data-lucide="alert-circle" class="w-5 h-5 flex-shrink-0"></i>
-                                <span><strong>Atenção:</strong> É necessário notificar o cliente sobre a possibilidade de custo.</span>
+
+                            <div id="div-ciente-custo" class="animate-fade-in border-t border-orange-200 pt-3">
+                                <span class="block text-sm font-medium text-gray-800 mb-2">Cliente ciente da possibilidade de ser gerado custo?</span>
+                                <div class="flex gap-4">
+                                    <label class="flex items-center gap-2 cursor-pointer text-sm bg-white px-3 py-1.5 rounded border hover:bg-gray-50 transition">
+                                        <input type="radio" name="cienteCusto" value="Sim" class="text-orange-600 focus:ring-orange-500"> Sim
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer text-sm bg-white px-3 py-1.5 rounded border hover:bg-gray-50 transition">
+                                        <input type="radio" name="cienteCusto" value="Não" class="text-orange-600 focus:ring-orange-500"> Não
+                                    </label>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -254,10 +271,16 @@
             }
         }
 
-        function toggleAlertCusto(show) {
-            const alertBox = document.getElementById('alert-custo');
-            if (show) alertBox.classList.remove('hidden');
-            else alertBox.classList.add('hidden');
+        function toggleCusto(isento) {
+            const divCiente = document.getElementById('div-ciente-custo');
+            if (isento) {
+                divCiente.classList.add('hidden');
+                // Limpa seleção dos radios
+                const radios = document.querySelectorAll('input[name="cienteCusto"]');
+                radios.forEach(r => r.checked = false);
+            } else {
+                divCiente.classList.remove('hidden');
+            }
         }
 
         function toggleExcecao(show) {
@@ -298,8 +321,10 @@
                 onu: document.getElementById('onu').value,
                 contato: document.getElementById('contato').value,
                 clienteDesde: document.getElementById('clienteDesde').value,
+                solicitacao: document.getElementById('solicitacao').value,
                 
-                cienteCusto: document.querySelector('input[name="cienteCusto"]:checked').value,
+                isentoCusto: document.querySelector('input[name="isentoCusto"]:checked').value,
+                cienteCusto: document.querySelector('input[name="cienteCusto"]:checked') ? document.querySelector('input[name="cienteCusto"]:checked').value : '',
                 
                 authExcecao: document.querySelector('input[name="authExcecao"]:checked').value,
                 nomeAutorizou: document.getElementById('nomeAutorizou').value,
@@ -327,14 +352,18 @@
                 setVal('onu', data.onu);
                 setVal('contato', data.contato);
                 setVal('clienteDesde', data.clienteDesde);
-                setRadio('cienteCusto', data.cienteCusto);
+                setVal('solicitacao', data.solicitacao);
+                
+                setRadio('isentoCusto', data.isentoCusto);
+                if (data.cienteCusto) setRadio('cienteCusto', data.cienteCusto);
+                
                 setRadio('authExcecao', data.authExcecao);
                 setVal('nomeAutorizou', data.nomeAutorizou);
                 setVal('nomeAtendente', data.nomeAtendente);
 
                 // Atualiza visuais
                 toggleHorarioApos();
-                toggleAlertCusto(data.cienteCusto === 'Não');
+                toggleCusto(data.isentoCusto === 'Sim');
                 toggleExcecao(data.authExcecao === 'Sim');
 
             } catch(e) { console.error("Erro ao carregar", e); }
@@ -371,13 +400,23 @@
             check('onu');
             check('contato');
             check('clienteDesde');
+            check('solicitacao');
             check('nomeAtendente');
             
+            // Valida radio ciente custo se não for isento
+            const isento = document.querySelector('input[name="isentoCusto"]:checked').value;
+            if (isento === 'Não' && !document.querySelector('input[name="cienteCusto"]:checked')) {
+                isValid = false;
+                showToast("Informe se o cliente está ciente do custo.", "error");
+            }
+
             if(document.querySelector('input[name="authExcecao"]:checked').value === 'Sim') {
                 check('nomeAutorizou', 'div-nome-autorizou');
             }
 
-            if (!isValid) {
+            if (!isValid && !firstError) {
+                // Erro já tratado (toast específico ou sem foco)
+            } else if (!isValid) {
                 showToast("Preencha os campos obrigatórios.", "error");
                 if(firstError) firstError.scrollIntoView({behavior: 'smooth', block: 'center'});
             }
@@ -395,9 +434,17 @@
             const onu = document.getElementById('onu').value;
             const contato = document.getElementById('contato').value;
             const clienteDesde = document.getElementById('clienteDesde').value;
-            
-            const solicitacao = document.getElementById('solicitacao').value; // Fixo
-            const cienteCusto = document.querySelector('input[name="cienteCusto"]:checked').value;
+            const solicitacao = document.getElementById('solicitacao').value;
+
+            // Lógica Custo
+            const isento = document.querySelector('input[name="isentoCusto"]:checked').value;
+            let infoCusto = "";
+            if (isento === 'Sim') {
+                infoCusto = "ISENTO";
+            } else {
+                const ciente = document.querySelector('input[name="cienteCusto"]:checked').value;
+                infoCusto = `Cliente ciente da possibilidade de custo? ${ciente}`;
+            }
 
             const excecao = document.querySelector('input[name="authExcecao"]:checked').value;
             let txtExcecao = excecao;
@@ -420,7 +467,7 @@ Cliente desde: ${clienteDesde}
 Solicitação: ${solicitacao}
 
 === CUSTO ===
-Ciente que poderá ser gerado custo? ${cienteCusto}
+${infoCusto}
 
 === AUTORIZAÇÃO / ATENDENTE ===
 Exceção (Torre)? ${txtExcecao}
@@ -444,11 +491,15 @@ Atendente: ${atendente}
                 
                 // Restaura
                 document.getElementById('nomeAtendente').value = atendente;
-                document.getElementById('solicitacao').value = "MUDANÇA DE COMODO";
+                document.getElementById('solicitacao').value = "MUDANÇA DE COMODO"; // Reset default value
 
                 // Reset visual
                 toggleHorarioApos();
-                toggleAlertCusto(false);
+                toggleCusto(false); // Reseta para o estado "Não isento" que é o checked padrão no HTML, ou true se preferir
+                // Ajustando para o padrão do HTML (Isento: Não)
+                document.querySelector('input[name="isentoCusto"][value="Não"]').checked = true;
+                toggleCusto(false);
+                
                 toggleExcecao(false);
                 
                 document.querySelectorAll('.border-red-500').forEach(e => e.classList.remove('border-red-500', 'ring-1', 'ring-red-500'));
