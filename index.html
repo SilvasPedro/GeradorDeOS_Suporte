@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abertura de Atendimento - ServiceDesk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px;
+            position: fixed;
+            z-index: 50;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 17px;
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+
+        .toast.success {
+            background-color: #10B981;
+        }
+
+        .toast.error {
+            background-color: #EF4444;
+        }
+
+        .toast.info {
+            background-color: #3B82F6;
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="flex flex-col md:flex-row min-h-screen">
+
+        <aside class="bg-slate-900 text-white w-full md:w-64 flex-shrink-0 md:min-h-screen flex flex-col">
+            <div class="p-6 bg-slate-950 flex items-center gap-3">
+                <i data-lucide="activity" class="text-blue-400"></i>
+                <span class="text-lg font-bold tracking-wide">ServiceDesk</span>
+            </div>
+            <nav class="flex-grow p-4 space-y-1">
+                <a href="index.html"
+                    class="flex items-center gap-3 px-4 py-3 bg-blue-600 text-white rounded-lg shadow-sm transition-all">
+                    <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                    <span class="font-medium">Abertura Atendimento</span>
+                </a>
+                <a href="os_geral.html"
+                    class="nav-link flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span>O.S Geral</span>
+                </a>
+                <a href="mud_endereco.html"
+                    class="nav-link flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all">
+                    <i data-lucide="truck" class="w-5 h-5"></i>
+                    <span class="font-medium">Mudança Endereço</span>
+                </a>
+                <a href="mud_comodo.html" class="nav-link flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all">
+                    <i data-lucide="sofa" class="w-5 h-5"></i>
+                    <span class="font-medium">Mudança Cômodo</span>
+                </a>
+                <a href="ponto_adicional.html" class="nav-link flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all">
+                    <i data-lucide="network" class="w-5 h-5"></i>
+                    <span class="font-medium">Ponto Adicional</span>
+                </a>
+                <a href="feedback.html"
+                    class="nav-link flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all">
+                    <i data-lucide="message-square-heart" class="w-5 h-5"></i>
+                    <span class="font-medium">Feedback</span>
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-slate-800">
+                <button onclick="resetForm()"
+                    class="w-full flex items-center gap-2 justify-center px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded text-sm transition text-gray-300 hover:text-white">
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i> Resetar Tela
+                </button>
+            </div>
+        </aside>
+
+        <main class="flex-1 p-4 md:p-8 overflow-y-auto">
+
+            <div class="mb-6 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-gray-800">Abertura de Atendimento</h2>
+                <span class="text-sm text-gray-500 bg-white px-3 py-1 rounded shadow-sm border">
+                    <i data-lucide="calendar" class="w-3 h-3 inline mr-1"></i> Hoje
+                </span>
+            </div>
+
+            <div class="max-w-5xl mx-auto space-y-4">
+
+                <form id="aberturaForm" class="grid grid-cols-1 lg:grid-cols-12 gap-4"
+                    onsubmit="event.preventDefault()">
+
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-12 flex flex-col border-t-4 border-blue-500">
+                        <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
+                            <i data-lucide="user" class="w-4 h-4 text-blue-500"></i> Dados do Cliente
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="md:col-span-2">
+                                <label for="nomeCliente">Nome do Cliente</label>
+                                <input type="text" id="nomeCliente" placeholder="Nome completo"
+                                    class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            </div>
+                            <div>
+                                <label for="cpfCnpj">CPF / CNPJ</label>
+                                <input type="text" id="cpfCnpj" placeholder="000.000.000-00"
+                                    class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            </div>
+                            <div>
+                                <label for="telefoneContato">Telefone para Contato</label>
+                                <input type="text" id="telefoneContato" placeholder="(XX) 9XXXX-XXXX"
+                                    class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-white p-5 rounded-lg shadow lg:col-span-8 flex flex-col h-full border-t-4 border-red-500">
+                        <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
+                            <i data-lucide="alert-circle" class="w-4 h-4 text-red-500"></i> Relato do Problema
+                        </h2>
+                        <div class="flex-grow">
+                            <label for="problemaRelatado">Descrição do Problema</label>
+                            <textarea id="problemaRelatado" rows="6"
+                                class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm"
+                                placeholder="Descreva detalhadamente o problema informado pelo cliente..."></textarea>
+                        </div>
+                    </div>
+
+                    <div
+                        class="bg-white p-5 rounded-lg shadow lg:col-span-4 flex flex-col h-full border-t-4 border-green-500">
+                        <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
+                            <i data-lucide="headset" class="w-4 h-4 text-green-600"></i> Responsável
+                        </h2>
+                        <div class="space-y-3">
+                            <div>
+                                <label for="nomeAtendente">Operador / Atendente</label>
+                                <input type="text" id="nomeAtendente"
+                                    class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            </div>
+
+                            <div class="bg-gray-50 p-3 rounded text-xs text-gray-500 border">
+                                <p>Certifique-se de confirmar os dados de contato antes de finalizar a abertura.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-12 flex flex-col sm:flex-row gap-4 pt-4 pb-12">
+                        <button type="button" onclick="copyScript()"
+                            class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow flex justify-center items-center gap-2 transition transform hover:scale-[1.01]">
+                            <i data-lucide="copy"></i> Copiar Abertura
+                        </button>
+                        <button type="button" onclick="resetForm()"
+                            class="sm:w-auto bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-3 px-6 rounded-lg shadow flex justify-center items-center gap-2 transition">
+                            <i data-lucide="trash-2"></i> Limpar
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <div id="toast" class="toast">Mensagem aqui</div>
+
+    <script>
+        // Inicializa ícones
+        lucide.createIcons();
+
+        // --- Lógica de Toast (Visual) ---
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById("toast");
+            toast.className = "toast show";
+            toast.classList.remove('success', 'error', 'info');
+
+            if (type === 'success') toast.classList.add('success');
+            if (type === 'error') toast.classList.add('error');
+            if (type === 'info') toast.classList.add('info');
+
+            toast.textContent = message;
+
+            setTimeout(function () {
+                toast.className = toast.className.replace("show", "");
+            }, 3000);
+        }
+
+        // --- LOCAL STORAGE (Salvar/Carregar) ---
+        // Usamos uma chave diferente ('aberturaAtendimentoData') para não conflitar com a O.S Geral
+        function saveState() {
+            const data = {
+                nomeCliente: document.getElementById('nomeCliente').value,
+                cpfCnpj: document.getElementById('cpfCnpj').value,
+                telefoneContato: document.getElementById('telefoneContato').value,
+                problemaRelatado: document.getElementById('problemaRelatado').value,
+                nomeAtendente: document.getElementById('nomeAtendente').value
+            };
+            localStorage.setItem('aberturaAtendimentoData', JSON.stringify(data));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('aberturaAtendimentoData');
+            if (!saved) return;
+
+            try {
+                const data = JSON.parse(saved);
+                const setVal = (id, val) => { if (document.getElementById(id)) document.getElementById(id).value = val || ''; }
+
+                setVal('nomeCliente', data.nomeCliente);
+                setVal('cpfCnpj', data.cpfCnpj);
+                setVal('telefoneContato', data.telefoneContato);
+                setVal('problemaRelatado', data.problemaRelatado);
+                setVal('nomeAtendente', data.nomeAtendente);
+
+            } catch (e) {
+                console.error("Erro ao carregar dados", e);
+            }
+        }
+
+        // Salvar ao digitar
+        document.getElementById('aberturaForm').addEventListener('input', saveState);
+        // Carregar ao iniciar
+        document.addEventListener('DOMContentLoaded', loadState);
+
+        // --- Validação, Cópia e Reset ---
+
+        function validateForm() {
+            let isValid = true;
+            let firstError = null;
+
+            // Lista de campos obrigatórios
+            const requiredFields = ['nomeCliente', 'cpfCnpj', 'telefoneContato', 'problemaRelatado', 'nomeAtendente'];
+
+            requiredFields.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el.value.trim()) {
+                    el.classList.add('border-red-500', 'ring-1', 'ring-red-500');
+                    if (!firstError) firstError = el;
+                    isValid = false;
+                } else {
+                    el.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
+                }
+            });
+
+            if (!isValid) {
+                showToast("Por favor, preencha todos os campos obrigatórios.", "error");
+                if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+
+            return isValid;
+        }
+
+        function copyScript() {
+            if (!validateForm()) return;
+
+            const nomeCliente = document.getElementById('nomeCliente').value;
+            const cpfCnpj = document.getElementById('cpfCnpj').value;
+            const telefone = document.getElementById('telefoneContato').value;
+            const problema = document.getElementById('problemaRelatado').value;
+            const atendente = document.getElementById('nomeAtendente').value;
+
+            const finalScript = `
+=== ABERTURA DE ATENDIMENTO ===
+Cliente: ${nomeCliente}
+CPF/CNPJ: ${cpfCnpj}
+Contato: ${telefone}
+
+=== PROBLEMA RELATADO ===
+${problema}
+
+=== RESPONSÁVEL ===
+Atendente: ${atendente}
+`.trim();
+
+            // Cria elemento temporário para copiar
+            const el = document.createElement('textarea');
+            el.value = finalScript;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+
+            showToast("Dados de abertura copiados!", "success");
+        }
+
+        function resetForm() {
+            if (confirm("Deseja limpar os dados do formulário? \n(O nome do operador será mantido)")) {
+                // 1. Preservar Atendente
+                const nomeAtendenteAtual = document.getElementById('nomeAtendente').value;
+
+                // 2. Resetar form
+                document.getElementById('aberturaForm').reset();
+
+                // 3. Restaurar Atendente
+                document.getElementById('nomeAtendente').value = nomeAtendenteAtual;
+
+                // 4. Limpar erros visuais
+                const inputs = document.querySelectorAll('input, textarea');
+                inputs.forEach(input => input.classList.remove('border-red-500', 'ring-1', 'ring-red-500'));
+
+                // 5. Atualizar Storage
+                saveState();
+
+                showToast("Formulário limpo.", "info");
+            }
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Script de Feedback - ServiceDesk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Toast Notification */
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px;
+            position: fixed;
+            z-index: 50;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 17px;
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+        .toast.success { background-color: #10B981; }
+        .toast.error { background-color: #EF4444; }
+        .toast.info { background-color: #3B82F6; }
+
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="flex flex-col md:flex-row min-h-screen">
+        
+        <aside class="bg-slate-900 text-white w-full md:w-64 flex-shrink-0 md:min-h-screen flex flex-col">
+            <div class="p-6 bg-slate-950 flex items-center gap-3">
+                <i data-lucide="activity" class="text-blue-400"></i>
+                <span class="text-lg font-bold tracking-wide">ETECC Telecom</span>
+            </div>
+            <nav class="flex-grow p-4 space-y-1">
+                <a href="index.html"
+                    class="nav-link flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all">
+                    <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                    <span class="font-medium">Abertura Atendimento</span>
+                </a>
+                <a href="os_geral.html"
+                    class="nav-link flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span>O.S Geral</span>
+                </a>
+                <a href="mud_endereco.html"
+                    class="nav-link flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all">
+                    <i data-lucide="truck" class="w-5 h-5"></i>
+                    <span class="font-medium">Mudança Endereço</span>
+                </a>
+                <a href="mud_comodo.html" class="nav-link flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all">
+                    <i data-lucide="sofa" class="w-5 h-5"></i>
+                    <span class="font-medium">Mudança Cômodo</span>
+                </a>
+                <a href="ponto_adicional.html" class="nav-link flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all">
+                    <i data-lucide="network" class="w-5 h-5"></i>
+                    <span class="font-medium">Ponto Adicional</span>
+                </a>
+                <a href="feedback.html"
+                    class="flex items-center gap-3 px-4 py-3 bg-blue-600 text-white rounded-lg shadow-sm transition-all
+">
+                    <i data-lucide="message-square-heart" class="w-5 h-5"></i>
+                    <span class="font-medium">Feedback</span>
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-slate-800">
+                <button onclick="resetForm()" class="w-full flex items-center gap-2 justify-center px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded text-sm transition text-gray-300 hover:text-white">
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i> Resetar Tela
+                </button>
+            </div>
+        </aside>
+
+        <main class="flex-1 p-4 md:p-8 overflow-y-auto">
+            
+            <div class="mb-6 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-gray-800">Script de Feedback</h2>
+                <span class="text-sm text-gray-500 bg-white px-3 py-1 rounded shadow-sm border">
+                    <i data-lucide="calendar" class="w-3 h-3 inline mr-1"></i> Hoje
+                </span>
+            </div>
+
+            <div class="max-w-6xl mx-auto space-y-4">
+
+                <form id="feedbackForm" class="grid grid-cols-1 lg:grid-cols-12 gap-4" onsubmit="event.preventDefault()">
+                    
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-6 border-t-4 border-yellow-500 flex flex-col">
+                        <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
+                            <i data-lucide="user" class="w-4 h-4 text-yellow-600"></i> Informações do Cliente
+                        </h2>
+                        <div class="space-y-3 flex-grow">
+                            <div>
+                                <label for="nomeCliente">Nome do Cliente</label>
+                                <input type="text" id="nomeCliente" placeholder="Nome completo" class="w-full p-2 border border-gray-300 rounded focus:ring-yellow-500 focus:border-yellow-500 text-sm">
+                            </div>
+                            <div>
+                                <label for="telefone">Telefone</label>
+                                <input type="text" id="telefone" placeholder="(XX) XXXXX-XXXX" class="w-full p-2 border border-gray-300 rounded focus:ring-yellow-500 focus:border-yellow-500 text-sm">
+                            </div>
+                            <div>
+                                <label for="relatoInicial">Relato Inicial</label>
+                                <textarea id="relatoInicial" rows="3" class="w-full p-2 border border-gray-300 rounded focus:ring-yellow-500 focus:border-yellow-500 text-sm" placeholder="O que motivou o contato ou feedback..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-6 border-t-4 border-blue-500 flex flex-col">
+                        <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
+                            <i data-lucide="star" class="w-4 h-4 text-blue-500"></i> Avaliação do Google
+                        </h2>
+                        
+                        <div class="mb-4">
+                            <span class="block text-sm font-medium text-gray-700 mb-2">Cliente aceitou link de avaliação?</span>
+                            <div class="flex gap-4">
+                                <label class="flex items-center gap-2 cursor-pointer text-sm bg-blue-50 px-4 py-2 rounded border hover:bg-blue-100 transition w-full justify-center">
+                                    <input type="radio" name="aceitouGoogle" value="Sim" onchange="toggleRecusa(false)" class="text-blue-600 focus:ring-blue-500"> 
+                                    <span class="font-semibold text-blue-700">SIM</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer text-sm bg-red-50 px-4 py-2 rounded border hover:bg-red-100 transition w-full justify-center">
+                                    <input type="radio" name="aceitouGoogle" value="Não" onchange="toggleRecusa(true)" checked class="text-red-600 focus:ring-red-500"> 
+                                    <span class="font-semibold text-red-700">NÃO</span>
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="div-motivo-recusa" class="animate-fade-in flex-grow">
+                            <label for="motivoRecusa" class="text-red-800 font-medium">Motivo da Recusa</label>
+                            <textarea id="motivoRecusa" rows="4" class="w-full p-2 border border-red-200 bg-red-50 rounded focus:ring-red-500 focus:border-red-500 text-sm" placeholder="Explique por que o cliente não aceitou..."></textarea>
+                        </div>
+                        <div id="div-motivo-spacer" class="hidden flex-grow"></div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-8 border-t-4 border-gray-500">
+                        <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
+                            <i data-lucide="clipboard-list" class="w-4 h-4 text-gray-500"></i> Pontos de Análise
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="md:col-span-2">
+                                <label for="conexaoEstabilidade">Conexão e Estabilidade</label>
+                                <input type="text" id="conexaoEstabilidade" placeholder="Ex: Estável, oscilando, normal..." class="w-full p-2 border border-gray-300 rounded focus:ring-gray-500 focus:border-gray-500 text-sm">
+                            </div>
+                            <div>
+                                <label for="avaliacaoAtendimento">Avaliação de Atendimento</label>
+                                <input type="text" id="avaliacaoAtendimento" placeholder="Nota ou comentário sobre o atendimento" class="w-full p-2 border border-gray-300 rounded focus:ring-gray-500 focus:border-gray-500 text-sm">
+                            </div>
+                            <div>
+                                <label for="sugestoes">Sugestões e Pontos de Melhoria</label>
+                                <input type="text" id="sugestoes" placeholder="Sugestões do cliente..." class="w-full p-2 border border-gray-300 rounded focus:ring-gray-500 focus:border-gray-500 text-sm">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-4 border-t-4 border-green-500 flex flex-col">
+                        <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
+                            <i data-lucide="headset" class="w-4 h-4 text-green-600"></i> Detalhes do Atendimento
+                        </h2>
+                        <div class="space-y-4 flex-grow">
+                            <div>
+                                <label for="nomeAtendente">Operador / Atendente</label>
+                                <input type="text" id="nomeAtendente" class="w-full p-2 border border-gray-300 rounded focus:ring-green-500 focus:border-green-500 text-sm">
+                            </div>
+                            <div>
+                                <label for="dataUltimoAtendimento">Data do Último Atendimento</label>
+                                <input type="date" id="dataUltimoAtendimento" class="w-full p-2 border border-gray-300 rounded focus:ring-green-500 focus:border-green-500 text-sm">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-12 flex flex-col sm:flex-row gap-4 pt-4 pb-12">
+                        <button type="button" onclick="copyScript()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow flex justify-center items-center gap-2 transition transform hover:scale-[1.01]">
+                            <i data-lucide="copy"></i> Copiar Script
+                        </button>
+                        <button type="button" onclick="resetForm()" class="sm:w-auto bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-3 px-6 rounded-lg shadow flex justify-center items-center gap-2 transition">
+                            <i data-lucide="trash-2"></i> Limpar
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <div id="toast" class="toast">Mensagem aqui</div>
+
+    <script>
+        lucide.createIcons();
+
+        // --- Visibilidade ---
+        function toggleRecusa(show) {
+            const divRecusa = document.getElementById('div-motivo-recusa');
+            const divSpacer = document.getElementById('div-motivo-spacer');
+            
+            if (show) {
+                divRecusa.classList.remove('hidden');
+                divSpacer.classList.add('hidden');
+            } else {
+                divRecusa.classList.add('hidden');
+                divSpacer.classList.remove('hidden'); // Mantém layout se necessário
+                document.getElementById('motivoRecusa').value = '';
+            }
+        }
+
+        // --- Toast ---
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById("toast");
+            toast.className = "toast show";
+            toast.classList.remove('success', 'error', 'info');
+            if (type === 'success') toast.classList.add('success');
+            if (type === 'error') toast.classList.add('error');
+            if (type === 'info') toast.classList.add('info');
+            toast.textContent = message;
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
+        function formatDate(dateString) {
+            if(!dateString) return '';
+            const [year, month, day] = dateString.split('-');
+            return `${day}/${month}/${year}`;
+        }
+
+        // --- LocalStorage ---
+        function saveState() {
+            const data = {
+                nomeCliente: document.getElementById('nomeCliente').value,
+                telefone: document.getElementById('telefone').value,
+                relatoInicial: document.getElementById('relatoInicial').value,
+                
+                conexaoEstabilidade: document.getElementById('conexaoEstabilidade').value,
+                avaliacaoAtendimento: document.getElementById('avaliacaoAtendimento').value,
+                sugestoes: document.getElementById('sugestoes').value,
+                
+                aceitouGoogle: document.querySelector('input[name="aceitouGoogle"]:checked').value,
+                motivoRecusa: document.getElementById('motivoRecusa').value,
+                
+                nomeAtendente: document.getElementById('nomeAtendente').value,
+                dataUltimoAtendimento: document.getElementById('dataUltimoAtendimento').value
+            };
+            localStorage.setItem('feedbackScriptData', JSON.stringify(data));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('feedbackScriptData');
+            if (!saved) return;
+
+            try {
+                const data = JSON.parse(saved);
+                const setVal = (id, val) => { if(document.getElementById(id)) document.getElementById(id).value = val || ''; }
+
+                setVal('nomeCliente', data.nomeCliente);
+                setVal('telefone', data.telefone);
+                setVal('relatoInicial', data.relatoInicial);
+                setVal('conexaoEstabilidade', data.conexaoEstabilidade);
+                setVal('avaliacaoAtendimento', data.avaliacaoAtendimento);
+                setVal('sugestoes', data.sugestoes);
+                setVal('motivoRecusa', data.motivoRecusa);
+                setVal('nomeAtendente', data.nomeAtendente);
+                setVal('dataUltimoAtendimento', data.dataUltimoAtendimento);
+
+                if (data.aceitouGoogle) {
+                    const el = document.querySelector(`input[name="aceitouGoogle"][value="${data.aceitouGoogle}"]`);
+                    if(el) el.checked = true;
+                }
+
+                toggleRecusa(data.aceitouGoogle === 'Não');
+
+            } catch(e) { console.error("Erro ao carregar", e); }
+        }
+
+        document.getElementById('feedbackForm').addEventListener('input', saveState);
+        document.addEventListener('DOMContentLoaded', loadState);
+
+        // --- Validação e Copy ---
+
+        function validateForm() {
+            let isValid = true;
+            let firstError = null;
+
+            const check = (id, parentHiddenId = null) => {
+                const el = document.getElementById(id);
+                if (parentHiddenId) {
+                    const parent = document.getElementById(parentHiddenId);
+                    if (parent && parent.classList.contains('hidden')) return true;
+                }
+                if (!el || !el.value.trim()) {
+                    if(el) el.classList.add('border-red-500', 'ring-1', 'ring-red-500');
+                    if (!firstError) firstError = el;
+                    isValid = false;
+                } else {
+                    if(el) el.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
+                }
+            }
+
+            check('nomeCliente');
+            check('telefone');
+            check('relatoInicial');
+            check('conexaoEstabilidade');
+            check('avaliacaoAtendimento');
+            check('nomeAtendente');
+
+            // Se recusou, motivo é obrigatório
+            if (document.querySelector('input[name="aceitouGoogle"]:checked').value === 'Não') {
+                check('motivoRecusa', 'div-motivo-recusa');
+            }
+
+            if (!isValid) {
+                showToast("Preencha os campos obrigatórios.", "error");
+                if(firstError) firstError.scrollIntoView({behavior: 'smooth', block: 'center'});
+            }
+            return isValid;
+        }
+
+        function copyScript() {
+            if (!validateForm()) return;
+
+            const nome = document.getElementById('nomeCliente').value;
+            const tel = document.getElementById('telefone').value;
+            const relato = document.getElementById('relatoInicial').value;
+            
+            const conexao = document.getElementById('conexaoEstabilidade').value;
+            const avaliacao = document.getElementById('avaliacaoAtendimento').value;
+            const sugestoes = document.getElementById('sugestoes').value;
+            
+            const aceitouGoogle = document.querySelector('input[name="aceitouGoogle"]:checked').value;
+            let textoGoogle = `Cliente aceitou link Google? ${aceitouGoogle}`;
+            if (aceitouGoogle === 'Não') {
+                textoGoogle += `\n   - Motivo: ${document.getElementById('motivoRecusa').value}`;
+            }
+
+            const atendente = document.getElementById('nomeAtendente').value;
+            const dataUltimo = formatDate(document.getElementById('dataUltimoAtendimento').value);
+
+            const script = `
+=== SCRIPT DE FEEDBACK ===
+
+=== INFORMAÇÕES DO CLIENTE ===
+Nome: ${nome}
+Telefone: ${tel}
+Relato Inicial: ${relato}
+
+=== PONTOS DE ANÁLISE ===
+Conexão/Estabilidade: ${conexao}
+Avaliação de atendimento: ${avaliacao}
+Sugestões/Melhoria: ${sugestoes}
+
+=== AVALIAÇÃO DO GOOGLE ===
+${textoGoogle}
+
+=== DETALHES DO ATENDIMENTO ===
+Atendente: ${atendente}
+Último atendimento: ${dataUltimo}
+`.trim();
+
+            const el = document.createElement('textarea');
+            el.value = script;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+
+            showToast("Feedback copiado!", "success");
+        }
+
+        function resetForm() {
+            if(confirm("Limpar formulário? (Nome do operador será mantido)")) {
+                const atendente = document.getElementById('nomeAtendente').value;
+                document.getElementById('feedbackForm').reset();
+                document.getElementById('nomeAtendente').value = atendente;
+
+                // Reset visual
+                toggleRecusa(true); // O reset padrao coloca o radio no checked inicial? Se HTML checked="checked" no Não, sim.
+                // Mas vamos garantir estado padrao do HTML:
+                // O HTML tem checked no 'Não'.
+                toggleRecusa(true); 
+
+                document.querySelectorAll('.border-red-500').forEach(e => e.classList.remove('border-red-500', 'ring-1', 'ring-red-500'));
+                saveState();
+                showToast("Formulário limpo.", "info");
+            }
+        }
+    </script>
+</body>
+</html>

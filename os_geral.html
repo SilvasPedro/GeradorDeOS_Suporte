@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Script de Atendimento</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Ícones Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px;
+            position: fixed;
+            z-index: 50;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 17px;
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+        .toast.success { background-color: #10B981; }
+        .toast.error { background-color: #EF4444; }
+        .toast.info { background-color: #3B82F6; }
+
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Estilo para link ativo no menu */
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="flex flex-col md:flex-row min-h-screen">
+        
+        <!-- Menu Lateral (Sidebar) -->
+        <aside class="bg-slate-900 text-white w-full md:w-64 flex-shrink-0 md:min-h-screen flex flex-col">
+            <div class="p-6 bg-slate-950 flex items-center gap-3">
+                <i data-lucide="activity" class="text-blue-400"></i>
+                <span class="text-lg font-bold tracking-wide">ServiceDesk</span>
+            </div>
+            <nav class="flex-grow p-4 space-y-1">
+                <a href="index.html"
+                    class="nav-link flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all">
+                    <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                    <span class="font-medium">Abertura Atendimento</span>
+                </a>
+                <a href="os_geral.html"
+                    class="flex items-center gap-3 px-4 py-3 bg-blue-600 text-white rounded-lg shadow-sm transition-all">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span>O.S Geral</span>
+                </a>
+                <a href="mud_endereco.html"
+                    class="nav-link flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all">
+                    <i data-lucide="truck" class="w-5 h-5"></i>
+                    <span class="font-medium">Mudança Endereço</span>
+                </a>
+                <a href="mud_comodo.html" class="nav-link flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all">
+                    <i data-lucide="sofa" class="w-5 h-5"></i>
+                    <span class="font-medium">Mudança Cômodo</span>
+                </a>
+                <a href="ponto_adicional.html" class="nav-link flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all">
+                    <i data-lucide="network" class="w-5 h-5"></i>
+                    <span class="font-medium">Ponto Adicional</span>
+                </a>
+                <a href="feedback.html"
+                    class="nav-link flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all">
+                    <i data-lucide="message-square-heart" class="w-5 h-5"></i>
+                    <span class="font-medium">Feedback</span>
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-slate-800">
+                <button onclick="resetForm()" class="w-full flex items-center gap-2 justify-center px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded text-sm transition text-gray-300 hover:text-white">
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i> Resetar Tela
+                </button>
+            </div>
+        </aside>
+
+        <!-- Conteúdo Principal -->
+        <main class="flex-1 p-4 md:p-8 overflow-y-auto">
+            
+            <!-- Título da Página -->
+            <div class="mb-6 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-gray-800">Ordem de Serviço Geral</h2>
+                <span class="text-sm text-gray-500 bg-white px-3 py-1 rounded shadow-sm border">
+                    <i data-lucide="calendar" class="w-3 h-3 inline mr-1"></i> Hoje
+                </span>
+            </div>
+
+            <div class="max-w-7xl mx-auto space-y-4">
+
+                <!-- Bairros de Risco -->
+                <section class="bg-white rounded-lg shadow overflow-hidden border border-red-100">
+                    <button onclick="toggleRisk()" class="w-full flex justify-between items-center p-3 bg-red-50 text-red-700 hover:bg-red-100 transition">
+                        <span class="font-bold flex items-center gap-2 text-sm"><i data-lucide="alert-triangle" class="w-4 h-4"></i> Visualizar Bairros de Risco</span>
+                        <i data-lucide="chevron-down" id="risk-icon" class="transition-transform duration-300 w-4 h-4"></i>
+                    </button>
+                    <div id="risk-content" class="hidden p-4 bg-red-50 text-sm border-t border-red-200">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <strong class="block text-red-800">Itanhaém:</strong>
+                                <span class="text-gray-700">Guapurá</span>
+                            </div>
+                            <div>
+                                <strong class="block text-red-800">Praia Grande:</strong>
+                                <span class="text-gray-700">Jardim Trevo | Jardim Aclimação | Ribeirópolis | Balneário Japurá | Esmeralda | Parque das Américas | Samambaia | Melvi</span>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Formulário -->
+                <form id="scriptForm" class="grid grid-cols-1 lg:grid-cols-12 gap-4" onsubmit="event.preventDefault()">
+                    
+                    <!-- Agendamento -->
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-4 flex flex-col h-full border-t-4 border-blue-500">
+                        <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
+                            <i data-lucide="calendar" class="w-4 h-4 text-blue-500"></i> Agendamento
+                        </h2>
+                        <div class="space-y-3 flex-grow">
+                            <div>
+                                <label for="dataAgendamento">Data</label>
+                                <input type="date" id="dataAgendamento" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            </div>
+                            <div>
+                                <label for="periodo">Período</label>
+                                <select id="periodo" onchange="toggleCustomTime()" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 bg-white text-sm">
+                                    <option value="">Selecione...</option>
+                                    <option value="Horário Comercial">Horário Comercial</option>
+                                    <option value="Primeira do dia">Primeira do dia</option>
+                                    <option value="Manhã (9 às 12h30)">Manhã (9 às 12h30)</option>
+                                    <option value="Tarde (13 às 17h30)">Tarde (13 às 17h30)</option>
+                                    <option value="Última do dia">Última do dia</option>
+                                    <option value="Após">Após (Informar Horário)</option>
+                                </select>
+                            </div>
+                            <div id="div-horario-apos" class="hidden animate-fade-in">
+                                <label for="horarioApos">Horário Específico</label>
+                                <input type="text" id="horarioApos" placeholder="Ex: 16:30" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Info Cliente -->
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-8 flex flex-col h-full border-t-4 border-blue-500">
+                        <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
+                            <i data-lucide="user" class="w-4 h-4 text-blue-500"></i> Informações do Cliente
+                        </h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div>
+                                <label for="roteador">Roteador</label>
+                                <select id="roteador" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 bg-white text-sm">
+                                    <option value="">Selecione...</option>
+                                    <option value="Comodato">Comodato</option>
+                                    <option value="Compra">Compra</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="onu">ONU</label>
+                                <select id="onu" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 bg-white text-sm">
+                                    <option value="">Selecione...</option>
+                                    <option value="Comodato">Comodato</option>
+                                    <option value="Compra">Compra</option>
+                                </select>
+                            </div>
+                            <div class="sm:col-span-2 lg:col-span-1">
+                                <label for="contato">Contato</label>
+                                <input type="text" id="contato" placeholder="(XX) XXXXX-XXXX" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            </div>
+                            <div class="sm:col-span-2 lg:col-span-1">
+                                <label for="clienteDesde">Cliente desde</label>
+                                <input type="text" id="clienteDesde" placeholder="Ex: 01/2020" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Detalhes O.S -->
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-6 flex flex-col h-full border-t-4 border-gray-400">
+                        <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
+                            <i data-lucide="file-text" class="w-4 h-4 text-gray-500"></i> Detalhes da O.S.
+                        </h2>
+                        <div class="flex-grow">
+                            <label for="solicitacao">Solicitação (Motivo)</label>
+                            <textarea id="solicitacao" rows="4" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="Descreva a solicitação do cliente..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Info Técnica -->
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-6 flex flex-col h-full border-t-4 border-gray-400">
+                        <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
+                            <i data-lucide="cpu" class="w-4 h-4 text-gray-500"></i> Informações Técnicas
+                        </h2>
+                        <div class="space-y-3 flex-grow">
+                            <div>
+                                <label for="sinalStatus">Sinal / Status ONU</label>
+                                <input type="text" id="sinalStatus" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="-20dbm / Online">
+                            </div>
+                            <div>
+                                <label for="historicoQuedas">Histórico de Quedas / Logs</label>
+                                <textarea id="historicoQuedas" rows="2" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="Copie os logs relevantes aqui..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Última O.S -->
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-6 flex flex-col h-full border-t-4 border-orange-400">
+                        <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
+                            <i data-lucide="clock" class="w-4 h-4 text-orange-500"></i> Última O.S.
+                        </h2>
+                        <div class="mb-3">
+                            <span class="block text-sm font-medium text-gray-700 mb-2">Teve atendimento recente?</span>
+                            <div class="flex gap-4">
+                                <label class="flex items-center gap-2 cursor-pointer text-sm bg-gray-50 px-3 py-1 rounded border hover:bg-gray-100 transition">
+                                    <input type="radio" name="recentOS" value="Sim" onchange="toggleRecentOS(true)" class="text-blue-600 focus:ring-blue-500"> Sim
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer text-sm bg-gray-50 px-3 py-1 rounded border hover:bg-gray-100 transition">
+                                    <input type="radio" name="recentOS" value="Não" onchange="toggleRecentOS(false)" checked class="text-blue-600 focus:ring-blue-500"> Não
+                                </label>
+                            </div>
+                        </div>
+
+                        <div id="div-detalhes-os-recente" class="hidden grid grid-cols-1 sm:grid-cols-3 gap-3 bg-gray-50 p-3 rounded border border-gray-200 animate-fade-in">
+                            <div class="sm:col-span-3 md:col-span-1">
+                                <label for="tipoOSRecente">Tipo</label>
+                                <input type="text" id="tipoOSRecente" class="w-full p-2 border border-gray-300 rounded text-sm">
+                            </div>
+                            <div class="sm:col-span-3 md:col-span-1">
+                                <label for="dataOSRecente">Data</label>
+                                <input type="date" id="dataOSRecente" class="w-full p-2 border border-gray-300 rounded text-sm">
+                            </div>
+                            <div class="sm:col-span-3 md:col-span-1">
+                                <label for="encerramentoOSRecente">Encerramento</label>
+                                <input type="text" id="encerramentoOSRecente" class="w-full p-2 border border-gray-300 rounded text-sm">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Atendente & Autorização -->
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-6 flex flex-col h-full border-t-4 border-green-500">
+                        <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
+                            <i data-lucide="shield-check" class="w-4 h-4 text-green-600"></i> Atendente & Autorização
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="nomeAtendente">Operador</label>
+                                <input type="text" id="nomeAtendente" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            </div>
+
+                            <div>
+                                <span class="block text-sm font-medium text-gray-700 mb-2">Autorização por Exceção?</span>
+                                <div class="flex gap-2 mb-2">
+                                    <label class="flex items-center gap-2 cursor-pointer text-sm bg-gray-50 px-3 py-1 rounded border hover:bg-gray-100 transition">
+                                        <input type="radio" name="authException" value="Sim" onchange="toggleException(true)" class="text-blue-600 focus:ring-blue-500"> Sim
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer text-sm bg-gray-50 px-3 py-1 rounded border hover:bg-gray-100 transition">
+                                        <input type="radio" name="authException" value="Não" onchange="toggleException(false)" checked class="text-blue-600 focus:ring-blue-500"> Não
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div id="div-autorizacao-nome" class="hidden md:col-span-2 animate-fade-in">
+                                <label for="nomeAutorizou">Nome de quem autorizou</label>
+                                <input type="text" id="nomeAutorizou" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 bg-yellow-50 border-yellow-300 text-sm">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Botões de Ação -->
+                    <div class="lg:col-span-12 flex flex-col sm:flex-row gap-4 pt-4 pb-12">
+                        <button type="button" onclick="copyScript()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow flex justify-center items-center gap-2 transition transform hover:scale-[1.01]">
+                            <i data-lucide="copy"></i> Copiar Script
+                        </button>
+                        <button type="button" onclick="resetForm()" class="sm:w-auto bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-3 px-6 rounded-lg shadow flex justify-center items-center gap-2 transition">
+                            <i data-lucide="trash-2"></i> Limpar
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">Mensagem aqui</div>
+
+    <script>
+        // Inicializa os ícones
+        lucide.createIcons();
+
+        // --- Lógica de Visualização ---
+
+        function toggleRisk() {
+            const content = document.getElementById('risk-content');
+            const icon = document.getElementById('risk-icon');
+            content.classList.toggle('hidden');
+            
+            if (content.classList.contains('hidden')) {
+                icon.style.transform = 'rotate(0deg)';
+            } else {
+                icon.style.transform = 'rotate(180deg)';
+            }
+        }
+
+        function toggleCustomTime() {
+            const periodo = document.getElementById('periodo').value;
+            const divApos = document.getElementById('div-horario-apos');
+            if (periodo === 'Após') {
+                divApos.classList.remove('hidden');
+            } else {
+                divApos.classList.add('hidden');
+                document.getElementById('horarioApos').value = '';
+            }
+        }
+
+        function toggleRecentOS(show) {
+            const div = document.getElementById('div-detalhes-os-recente');
+            if (show) {
+                div.classList.remove('hidden');
+            } else {
+                div.classList.add('hidden');
+                document.getElementById('tipoOSRecente').value = '';
+                document.getElementById('dataOSRecente').value = '';
+                document.getElementById('encerramentoOSRecente').value = '';
+            }
+        }
+
+        function toggleException(show) {
+            const div = document.getElementById('div-autorizacao-nome');
+            if (show) {
+                div.classList.remove('hidden');
+            } else {
+                div.classList.add('hidden');
+                document.getElementById('nomeAutorizou').value = '';
+            }
+        }
+
+        // --- Lógica de Toast ---
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById("toast");
+            toast.className = "toast show";
+            toast.classList.remove('success', 'error', 'info'); // limpa classes anteriores
+            if (type === 'success') toast.classList.add('success');
+            if (type === 'error') toast.classList.add('error');
+            if (type === 'info') toast.classList.add('info');
+            
+            toast.textContent = message;
+            
+            setTimeout(function(){ 
+                toast.className = toast.className.replace("show", ""); 
+            }, 3000);
+        }
+
+        // --- Formatação de Data ---
+        function formatDate(dateString) {
+            if(!dateString) return '';
+            const [year, month, day] = dateString.split('-');
+            return `${day}/${month}/${year}`;
+        }
+
+        // --- LOCAL STORAGE (Salvar/Carregar) ---
+
+        function saveState() {
+            const data = {
+                dataAgendamento: document.getElementById('dataAgendamento').value,
+                periodo: document.getElementById('periodo').value,
+                horarioApos: document.getElementById('horarioApos').value,
+                roteador: document.getElementById('roteador').value,
+                onu: document.getElementById('onu').value,
+                contato: document.getElementById('contato').value,
+                clienteDesde: document.getElementById('clienteDesde').value,
+                solicitacao: document.getElementById('solicitacao').value,
+                sinalStatus: document.getElementById('sinalStatus').value,
+                historicoQuedas: document.getElementById('historicoQuedas').value,
+                recentOS: document.querySelector('input[name="recentOS"]:checked').value,
+                tipoOSRecente: document.getElementById('tipoOSRecente').value,
+                dataOSRecente: document.getElementById('dataOSRecente').value,
+                encerramentoOSRecente: document.getElementById('encerramentoOSRecente').value,
+                nomeAtendente: document.getElementById('nomeAtendente').value,
+                authException: document.querySelector('input[name="authException"]:checked').value,
+                nomeAutorizou: document.getElementById('nomeAutorizou').value
+            };
+            localStorage.setItem('serviceDeskScriptData', JSON.stringify(data));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('serviceDeskScriptData');
+            if (!saved) return;
+
+            try {
+                const data = JSON.parse(saved);
+
+                // Helper para definir valor com segurança
+                const setVal = (id, val) => { if(document.getElementById(id)) document.getElementById(id).value = val || ''; }
+
+                setVal('dataAgendamento', data.dataAgendamento);
+                setVal('periodo', data.periodo);
+                setVal('horarioApos', data.horarioApos);
+                setVal('roteador', data.roteador);
+                setVal('onu', data.onu);
+                setVal('contato', data.contato);
+                setVal('clienteDesde', data.clienteDesde);
+                setVal('solicitacao', data.solicitacao);
+                setVal('sinalStatus', data.sinalStatus);
+                setVal('historicoQuedas', data.historicoQuedas);
+                setVal('nomeAtendente', data.nomeAtendente);
+                setVal('tipoOSRecente', data.tipoOSRecente);
+                setVal('dataOSRecente', data.dataOSRecente);
+                setVal('encerramentoOSRecente', data.encerramentoOSRecente);
+                setVal('nomeAutorizou', data.nomeAutorizou);
+
+                // Radios
+                if (data.recentOS) {
+                    const radio = document.querySelector(`input[name="recentOS"][value="${data.recentOS}"]`);
+                    if (radio) radio.checked = true;
+                }
+                if (data.authException) {
+                    const radio = document.querySelector(`input[name="authException"][value="${data.authException}"]`);
+                    if (radio) radio.checked = true;
+                }
+
+                // Atualizar visibilidade baseada nos dados carregados
+                toggleCustomTime();
+                toggleRecentOS(data.recentOS === 'Sim');
+                toggleException(data.authException === 'Sim');
+                
+                if(Object.keys(data).length > 0) {
+                    // showToast("Dados restaurados.", "info");
+                }
+            } catch (e) {
+                console.error("Erro ao carregar dados", e);
+            }
+        }
+
+        // Salvar sempre que houver input no formulário
+        document.getElementById('scriptForm').addEventListener('input', saveState);
+        
+        // Carregar ao iniciar
+        document.addEventListener('DOMContentLoaded', loadState);
+
+
+        // --- Validação, Cópia e Reset ---
+
+        function validateForm() {
+            let isValid = true;
+            let firstError = null;
+            
+            const checkField = (id, parentHiddenId = null) => {
+                const el = document.getElementById(id);
+                if (parentHiddenId) {
+                    const parent = document.getElementById(parentHiddenId);
+                    if (parent && parent.classList.contains('hidden')) return true;
+                }
+
+                if (!el.value.trim()) {
+                    el.classList.add('border-red-500', 'ring-1', 'ring-red-500');
+                    if (!firstError) firstError = el;
+                    isValid = false;
+                    return false;
+                } else {
+                    el.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
+                    return true;
+                }
+            };
+
+            checkField('dataAgendamento');
+            checkField('periodo');
+            checkField('horarioApos', 'div-horario-apos');
+            checkField('roteador');
+            checkField('onu');
+            checkField('contato');
+            checkField('clienteDesde');
+            checkField('solicitacao');
+            checkField('sinalStatus');
+            checkField('historicoQuedas');
+            checkField('nomeAtendente');
+
+            const hasRecentOS = document.querySelector('input[name="recentOS"]:checked').value === 'Sim';
+            if (hasRecentOS) {
+                checkField('tipoOSRecente', 'div-detalhes-os-recente');
+                checkField('dataOSRecente', 'div-detalhes-os-recente');
+                checkField('encerramentoOSRecente', 'div-detalhes-os-recente');
+            }
+
+            const hasException = document.querySelector('input[name="authException"]:checked').value === 'Sim';
+            if (hasException) {
+                checkField('nomeAutorizou', 'div-autorizacao-nome');
+            }
+
+            if (!isValid) {
+                showToast("Por favor, preencha todos os campos obrigatórios.", "error");
+                if(firstError) firstError.scrollIntoView({behavior: 'smooth', block: 'center'});
+            }
+
+            return isValid;
+        }
+
+        function copyScript() {
+            if (!validateForm()) return;
+
+            const dataAgendamento = formatDate(document.getElementById('dataAgendamento').value);
+            let periodo = document.getElementById('periodo').value;
+            if (periodo === 'Após') periodo = `Após: ${document.getElementById('horarioApos').value}`;
+
+            const roteador = document.getElementById('roteador').value;
+            const onu = document.getElementById('onu').value;
+            const contato = document.getElementById('contato').value;
+            const clienteDesde = document.getElementById('clienteDesde').value;
+            const solicitacao = document.getElementById('solicitacao').value;
+            const sinalStatus = document.getElementById('sinalStatus').value;
+            const historicoQuedas = document.getElementById('historicoQuedas').value;
+            const nomeAtendente = document.getElementById('nomeAtendente').value;
+
+            const hasRecentOS = document.querySelector('input[name="recentOS"]:checked').value;
+            let scriptOSRecente = `Recente Suporte/OS: ${hasRecentOS}`;
+            if (hasRecentOS === 'Sim') {
+                scriptOSRecente += `
+   - Tipo: ${document.getElementById('tipoOSRecente').value}
+   - Data: ${formatDate(document.getElementById('dataOSRecente').value)}
+   - Encerramento: ${document.getElementById('encerramentoOSRecente').value}`;
+            }
+
+            const hasException = document.querySelector('input[name="authException"]:checked').value;
+            let scriptExcecao = `Autorização por Exceção: ${hasException}`;
+            if (hasException === 'Sim') {
+                scriptExcecao += ` (Autorizado por: ${document.getElementById('nomeAutorizou').value})`;
+            }
+
+            const finalScript = `
+=== AGENDAMENTO ===
+DATA: ${dataAgendamento}
+PERÍODO: ${periodo}
+
+=== INFORMAÇÕES DO CLIENTE ===
+Roteador: ${roteador}
+ONU: ${onu}
+Contato: ${contato}
+Cliente desde: ${clienteDesde}
+
+=== DETALHES DA SOLICITAÇÃO ===
+${solicitacao}
+
+=== INFORMAÇÕES TÉCNICAS ===
+Sinal/Status: ${sinalStatus}
+Histórico:
+${historicoQuedas}
+
+=== HISTÓRICO ===
+${scriptOSRecente}
+
+=== ATENDIMENTO ===
+Atendente: ${nomeAtendente}
+${scriptExcecao}
+`.trim();
+
+            const el = document.createElement('textarea');
+            el.value = finalScript;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+
+            showToast("Script copiado com sucesso!", "success");
+        }
+
+        function resetForm() {
+            if(confirm("Deseja limpar o formulário atual? \n(O nome do operador será mantido)")) {
+                // 1. Salvar nome do atendente
+                const nomeAtendenteAtual = document.getElementById('nomeAtendente').value;
+                
+                // 2. Resetar o formulário HTML
+                document.getElementById('scriptForm').reset();
+                
+                // 3. Restaurar o nome do atendente
+                document.getElementById('nomeAtendente').value = nomeAtendenteAtual;
+                
+                // 4. Esconder divs condicionais (que o reset() abriu ou manteve abertas incorretamente)
+                document.getElementById('div-horario-apos').classList.add('hidden');
+                document.getElementById('div-detalhes-os-recente').classList.add('hidden');
+                document.getElementById('div-autorizacao-nome').classList.add('hidden');
+                
+                // 5. Remover classes de erro visual
+                const inputs = document.querySelectorAll('input, select, textarea');
+                inputs.forEach(input => input.classList.remove('border-red-500', 'ring-1', 'ring-red-500'));
+
+                // 6. Atualizar o localStorage com o estado "limpo" (mas com o nome)
+                saveState();
+
+                showToast("Formulário limpo.", "info");
+            }
+        }
+    </script>
+</body>
+</html>

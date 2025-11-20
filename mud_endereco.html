@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>O.S. Mudança de Endereço - ServiceDesk</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Toast Notification */
+        .toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 16px;
+            position: fixed;
+            z-index: 50;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-size: 17px;
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+
+        .toast.success {
+            background-color: #10B981;
+        }
+
+        .toast.error {
+            background-color: #EF4444;
+        }
+
+        .toast.info {
+            background-color: #3B82F6;
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="flex flex-col md:flex-row min-h-screen">
+
+        <aside class="bg-slate-900 text-white w-full md:w-64 flex-shrink-0 md:min-h-screen flex flex-col">
+            <div class="p-6 bg-slate-950 flex items-center gap-3">
+                <i data-lucide="activity" class="text-blue-400"></i>
+                <span class="text-lg font-bold tracking-wide">ServiceDesk</span>
+            </div>
+            <nav class="flex-grow p-4 space-y-1">
+                <a href="index.html"
+                    class="nav-link flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all">
+                    <i data-lucide="clipboard-list" class="w-5 h-5"></i>
+                    <span class="font-medium">Abertura Atendimento</span>
+                </a>
+                <a href="os_geral.html"
+                    class="nav-link flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+                    <span>O.S Geral</span>
+                </a>
+                <a href="mud_endereco.html"
+                    class="flex items-center gap-3 px-4 py-3 bg-blue-600 text-white rounded-lg shadow-sm transition-all
+">
+                    <i data-lucide="truck" class="w-5 h-5"></i>
+                    <span class="font-medium">Mudança Endereço</span>
+                </a>
+                <a href="mud_comodo.html" class="nav-link flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all">
+                    <i data-lucide="sofa" class="w-5 h-5"></i>
+                    <span class="font-medium">Mudança Cômodo</span>
+                </a>
+                <a href="ponto_adicional.html" class="nav-link flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all">
+                    <i data-lucide="network" class="w-5 h-5"></i>
+                    <span class="font-medium">Ponto Adicional</span>
+                </a>
+                <a href="feedback.html"
+                    class="nav-link flex items-center gap-3 px-4 py-3 text-gray-300 hover:text-white rounded-lg transition-all">
+                    <i data-lucide="message-square-heart" class="w-5 h-5"></i>
+                    <span class="font-medium">Feedback</span>
+                </a>
+            </nav>
+
+            <div class="p-4 border-t border-slate-800">
+                <button onclick="resetForm()"
+                    class="w-full flex items-center gap-2 justify-center px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded text-sm transition text-gray-300 hover:text-white">
+                    <i data-lucide="refresh-cw" class="w-4 h-4"></i> Resetar Tela
+                </button>
+            </div>
+        </aside>
+
+        <main class="flex-1 p-4 md:p-8 overflow-y-auto">
+
+            <div class="mb-6 flex justify-between items-center">
+                <h2 class="text-2xl font-bold text-gray-800">Mudança de Endereço</h2>
+                <span class="text-sm text-gray-500 bg-white px-3 py-1 rounded shadow-sm border">
+                    <i data-lucide="calendar" class="w-3 h-3 inline mr-1"></i> Hoje
+                </span>
+            </div>
+
+            <div class="max-w-7xl mx-auto space-y-4">
+
+                <form id="mudancaForm" class="grid grid-cols-1 lg:grid-cols-12 gap-4" onsubmit="event.preventDefault()">
+
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-12 border-t-4 border-teal-500">
+                        <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
+                            <i data-lucide="calendar-days" class="w-4 h-4 text-teal-500"></i> Agendamento & Detalhes
+                        </h2>
+
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-4">
+                            <div>
+                                <label for="solicitacao" class="font-semibold text-gray-700">Solicitação (Fixo)</label>
+                                <input type="text" id="solicitacao" value="MUDANÇA DE ENDEREÇO" readonly
+                                    class="w-full p-2 border border-gray-300 bg-gray-100 rounded text-sm font-bold text-gray-600 cursor-not-allowed">
+                            </div>
+                            <div>
+                                <label for="taxa" class="font-semibold text-gray-700">Taxa (Fixo)</label>
+                                <input type="text" id="taxa" value="ISENTO" readonly
+                                    class="w-full p-2 border border-gray-300 bg-gray-100 rounded text-sm font-bold text-gray-600 cursor-not-allowed">
+                            </div>
+                            <div>
+                                <label class="block mb-2 font-semibold text-gray-700">Pode adiantar?</label>
+                                <div class="flex gap-4">
+                                    <label
+                                        class="flex items-center gap-2 cursor-pointer text-sm bg-gray-50 px-3 py-2 rounded border w-full justify-center hover:bg-gray-100">
+                                        <input type="radio" name="podeAdiantar" value="Sim"
+                                            class="text-teal-600 focus:ring-teal-500"> Sim
+                                    </label>
+                                    <label
+                                        class="flex items-center gap-2 cursor-pointer text-sm bg-gray-50 px-3 py-2 rounded border w-full justify-center hover:bg-gray-100">
+                                        <input type="radio" name="podeAdiantar" value="Não" checked
+                                            class="text-teal-600 focus:ring-teal-500"> Não
+                                    </label>
+                                </div>
+                            </div>
+                            <div>
+                                <label for="dataAgendamento">Data de Agendamento</label>
+                                <input type="date" id="dataAgendamento"
+                                    class="w-full p-2 border border-gray-300 rounded focus:ring-teal-500 focus:border-teal-500 text-sm">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+                            <div class="md:col-span-2">
+                                <label for="periodo">Período</label>
+                                <select id="periodo" onchange="toggleHorarioApos()"
+                                    class="w-full p-2 border border-gray-300 rounded focus:ring-teal-500 focus:border-teal-500 bg-white text-sm">
+                                    <option value="">Selecione...</option>
+                                    <option value="Comercial">Comercial</option>
+                                    <option value="Primeira do dia">Primeira do dia</option>
+                                    <option value="Manhã">Manhã</option>
+                                    <option value="Tarde">Tarde</option>
+                                    <option value="Última do dia">Última do dia</option>
+                                    <option value="Após">Após (Informar Horário)</option>
+                                </select>
+                            </div>
+                            <div id="div-horario-apos" class="hidden md:col-span-2 animate-fade-in">
+                                <label for="horarioApos">Horário Específico</label>
+                                <input type="text" id="horarioApos" placeholder="Ex: 17:00"
+                                    class="w-full p-2 border border-gray-300 rounded focus:ring-teal-500 focus:border-teal-500 text-sm">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-8 border-t-4 border-blue-500 flex flex-col">
+                        <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
+                            <i data-lucide="map-pin" class="w-4 h-4 text-blue-500"></i> Endereços e Contato
+                        </h2>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
+                            <div>
+                                <label for="clienteDesde">Cliente Desde</label>
+                                <input type="text" id="clienteDesde" placeholder="Ex: 01/2022"
+                                    class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            </div>
+                            <div>
+                                <label for="contato">Telefone (Contato)</label>
+                                <input type="text" id="contato" placeholder="(XX) XXXXX-XXXX"
+                                    class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            </div>
+                        </div>
+
+                        <div class="space-y-3">
+                            <div>
+                                <label for="enderecoAtual">Endereço Atual</label>
+                                <input type="text" id="enderecoAtual" placeholder="Rua, Número, Bairro - Cidade"
+                                    class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            </div>
+                            <div class="p-3 bg-blue-50 rounded border border-blue-100 space-y-3">
+                                <div>
+                                    <label for="novoEndereco" class="text-blue-800 font-semibold">Novo Endereço</label>
+                                    <input type="text" id="novoEndereco" placeholder="Rua, Número, Bairro - Cidade"
+                                        class="w-full p-2 border border-blue-200 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                </div>
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                    <div>
+                                        <label for="refNovoEndereco" class="text-blue-800">Referência</label>
+                                        <input type="text" id="refNovoEndereco"
+                                            class="w-full p-2 border border-blue-200 rounded text-sm">
+                                    </div>
+                                    <div>
+                                        <label for="locMaps" class="text-blue-800">Localização Maps (Link)</label>
+                                        <input type="text" id="locMaps"
+                                            class="w-full p-2 border border-blue-200 rounded text-sm">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-4 flex flex-col gap-4">
+
+                        <div class="bg-white p-5 rounded-lg shadow border-t-4 border-orange-500 flex-grow">
+                            <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
+                                <i data-lucide="file-check" class="w-4 h-4 text-orange-500"></i> Verificações
+                            </h2>
+
+                            <div class="mb-4">
+                                <label for="comprovante">Comprovante de Endereço</label>
+                                <select id="comprovante"
+                                    class="w-full p-2 border border-gray-300 rounded focus:ring-orange-500 focus:border-orange-500 bg-white text-sm">
+                                    <option value="">Selecione...</option>
+                                    <option value="Anexado">Anexado</option>
+                                    <option value="Não Enviado">Não Enviado</option>
+                                    <option value="Não Possui">Não Possui</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <span class="block text-sm font-medium text-gray-700 mb-2">Cliente tem ponto
+                                    adicional?</span>
+                                <div class="flex gap-3 mb-2">
+                                    <label
+                                        class="flex items-center gap-2 cursor-pointer text-sm bg-gray-50 px-3 py-2 rounded border flex-1 justify-center">
+                                        <input type="radio" name="pontoAdicional" value="Sim"
+                                            onchange="toggleAlertPonto(true)"
+                                            class="text-orange-600 focus:ring-orange-500"> Sim
+                                    </label>
+                                    <label
+                                        class="flex items-center gap-2 cursor-pointer text-sm bg-gray-50 px-3 py-2 rounded border flex-1 justify-center">
+                                        <input type="radio" name="pontoAdicional" value="Não"
+                                            onchange="toggleAlertPonto(false)" checked
+                                            class="text-orange-600 focus:ring-orange-500"> Não
+                                    </label>
+                                </div>
+                                <div id="alert-ponto-adicional"
+                                    class="hidden p-3 bg-yellow-50 border border-yellow-200 rounded text-yellow-800 text-sm flex items-start gap-2 animate-fade-in">
+                                    <i data-lucide="alert-triangle" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                                    <span><strong>Atenção:</strong> Notifique o cliente sobre avaliação desse ponto para
+                                        a nova residência.</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-white p-5 rounded-lg shadow border-t-4 border-purple-500">
+                            <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
+                                <i data-lucide="package-check" class="w-4 h-4 text-purple-500"></i> ETECC Resolve
+                            </h2>
+                            <label for="eteccResolve">Cliente aceitou serviço de mudança?</label>
+                            <select id="eteccResolve"
+                                class="w-full p-2 border border-gray-300 rounded focus:ring-purple-500 focus:border-purple-500 bg-white text-sm mt-1">
+                                <option value="">Selecione...</option>
+                                <option value="Aceitou">Aceitou</option>
+                                <option value="Não aceitou">Não aceitou</option>
+                                <option value="Já se mudou">Já se mudou</option>
+                                <option value="Contratou outro serviço">Contratou outro serviço</option>
+                                <option value="Não oferecido">Não oferecido</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-12 border-t-4 border-green-500">
+                        <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
+                            <i data-lucide="shield-check" class="w-4 h-4 text-green-600"></i> Autorização & Atendente
+                        </h2>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div>
+                                <span class="block text-sm font-medium text-gray-700 mb-2">Autorização por Exceção
+                                    (Torre)?</span>
+                                <div class="flex gap-4 mb-2">
+                                    <label
+                                        class="flex items-center gap-2 cursor-pointer text-sm bg-gray-50 px-3 py-1 rounded border">
+                                        <input type="radio" name="authExcecao" value="Sim"
+                                            onchange="toggleExcecao(true)" class="text-green-600 focus:ring-green-500">
+                                        Sim
+                                    </label>
+                                    <label
+                                        class="flex items-center gap-2 cursor-pointer text-sm bg-gray-50 px-3 py-1 rounded border">
+                                        <input type="radio" name="authExcecao" value="Não"
+                                            onchange="toggleExcecao(false)" checked
+                                            class="text-green-600 focus:ring-green-500"> Não
+                                    </label>
+                                </div>
+                                <div id="div-nome-autorizou" class="hidden animate-fade-in mt-2">
+                                    <label for="nomeAutorizou" class="text-xs font-bold text-green-700">Nome de quem
+                                        autorizou</label>
+                                    <input type="text" id="nomeAutorizou"
+                                        class="w-full p-2 border border-green-200 bg-green-50 rounded focus:ring-green-500 focus:border-green-500 text-sm">
+                                </div>
+                            </div>
+
+                            <div>
+                                <label for="nomeAtendente">Operador / Atendente</label>
+                                <input type="text" id="nomeAtendente"
+                                    class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm mt-1">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-12 flex flex-col sm:flex-row gap-4 pt-4 pb-12">
+                        <button type="button" onclick="copyScript()"
+                            class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow flex justify-center items-center gap-2 transition transform hover:scale-[1.01]">
+                            <i data-lucide="copy"></i> Copiar Script
+                        </button>
+                        <button type="button" onclick="resetForm()"
+                            class="sm:w-auto bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-3 px-6 rounded-lg shadow flex justify-center items-center gap-2 transition">
+                            <i data-lucide="trash-2"></i> Limpar
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <div id="toast" class="toast">Mensagem aqui</div>
+
+    <script>
+        lucide.createIcons();
+
+        // --- Controles de Visibilidade ---
+
+        function toggleHorarioApos() {
+            const periodo = document.getElementById('periodo').value;
+            const div = document.getElementById('div-horario-apos');
+            if (periodo === 'Após') {
+                div.classList.remove('hidden');
+            } else {
+                div.classList.add('hidden');
+                document.getElementById('horarioApos').value = '';
+            }
+        }
+
+        function toggleAlertPonto(show) {
+            const alertBox = document.getElementById('alert-ponto-adicional');
+            if (show) alertBox.classList.remove('hidden');
+            else alertBox.classList.add('hidden');
+        }
+
+        function toggleExcecao(show) {
+            const div = document.getElementById('div-nome-autorizou');
+            if (show) div.classList.remove('hidden');
+            else {
+                div.classList.add('hidden');
+                document.getElementById('nomeAutorizou').value = '';
+            }
+        }
+
+        // --- Utilitários ---
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById("toast");
+            toast.className = "toast show";
+            toast.classList.remove('success', 'error', 'info');
+            if (type === 'success') toast.classList.add('success');
+            if (type === 'error') toast.classList.add('error');
+            if (type === 'info') toast.classList.add('info');
+            toast.textContent = message;
+            setTimeout(() => { toast.className = toast.className.replace("show", ""); }, 3000);
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return '';
+            const [year, month, day] = dateString.split('-');
+            return `${day}/${month}/${year}`;
+        }
+
+        // --- Local Storage ---
+        function saveState() {
+            const data = {
+                podeAdiantar: document.querySelector('input[name="podeAdiantar"]:checked').value,
+                dataAgendamento: document.getElementById('dataAgendamento').value,
+                periodo: document.getElementById('periodo').value,
+                horarioApos: document.getElementById('horarioApos').value,
+
+                clienteDesde: document.getElementById('clienteDesde').value,
+                contato: document.getElementById('contato').value,
+                enderecoAtual: document.getElementById('enderecoAtual').value,
+                novoEndereco: document.getElementById('novoEndereco').value,
+                refNovoEndereco: document.getElementById('refNovoEndereco').value,
+                locMaps: document.getElementById('locMaps').value,
+
+                comprovante: document.getElementById('comprovante').value,
+                pontoAdicional: document.querySelector('input[name="pontoAdicional"]:checked').value,
+                eteccResolve: document.getElementById('eteccResolve').value,
+
+                authExcecao: document.querySelector('input[name="authExcecao"]:checked').value,
+                nomeAutorizou: document.getElementById('nomeAutorizou').value,
+                nomeAtendente: document.getElementById('nomeAtendente').value
+            };
+            localStorage.setItem('osMudancaEndData', JSON.stringify(data));
+        }
+
+        function loadState() {
+            const saved = localStorage.getItem('osMudancaEndData');
+            if (!saved) return;
+
+            try {
+                const data = JSON.parse(saved);
+                const setVal = (id, val) => { if (document.getElementById(id)) document.getElementById(id).value = val || ''; }
+                const setRadio = (name, val) => {
+                    const el = document.querySelector(`input[name="${name}"][value="${val}"]`);
+                    if (el) el.checked = true;
+                }
+
+                setRadio('podeAdiantar', data.podeAdiantar);
+                setVal('dataAgendamento', data.dataAgendamento);
+                setVal('periodo', data.periodo);
+                setVal('horarioApos', data.horarioApos);
+                setVal('clienteDesde', data.clienteDesde);
+                setVal('contato', data.contato);
+                setVal('enderecoAtual', data.enderecoAtual);
+                setVal('novoEndereco', data.novoEndereco);
+                setVal('refNovoEndereco', data.refNovoEndereco);
+                setVal('locMaps', data.locMaps);
+                setVal('comprovante', data.comprovante);
+                setRadio('pontoAdicional', data.pontoAdicional);
+                setVal('eteccResolve', data.eteccResolve);
+                setRadio('authExcecao', data.authExcecao);
+                setVal('nomeAutorizou', data.nomeAutorizou);
+                setVal('nomeAtendente', data.nomeAtendente);
+
+                // Atualiza visuais
+                toggleHorarioApos();
+                toggleAlertPonto(data.pontoAdicional === 'Sim');
+                toggleExcecao(data.authExcecao === 'Sim');
+
+            } catch (e) { console.error("Erro ao carregar", e); }
+        }
+
+        document.getElementById('mudancaForm').addEventListener('input', saveState);
+        document.addEventListener('DOMContentLoaded', loadState);
+
+        // --- Validação e Copy ---
+
+        function validateForm() {
+            let isValid = true;
+            let firstError = null;
+
+            const check = (id, parentHiddenId = null) => {
+                const el = document.getElementById(id);
+                // Se for filho de um hidden, ignora validação
+                if (parentHiddenId) {
+                    const parent = document.getElementById(parentHiddenId);
+                    if (parent && parent.classList.contains('hidden')) return true;
+                }
+
+                if (!el || !el.value.trim()) {
+                    if (el) el.classList.add('border-red-500', 'ring-1', 'ring-red-500');
+                    if (!firstError) firstError = el;
+                    isValid = false;
+                } else {
+                    if (el) el.classList.remove('border-red-500', 'ring-1', 'ring-red-500');
+                }
+            }
+
+            check('dataAgendamento');
+            check('periodo');
+            check('horarioApos', 'div-horario-apos');
+            check('clienteDesde');
+            check('contato');
+            check('enderecoAtual');
+            check('novoEndereco');
+            check('refNovoEndereco');
+            check('comprovante');
+            check('eteccResolve');
+            check('nomeAtendente');
+
+            if (document.querySelector('input[name="authExcecao"]:checked').value === 'Sim') {
+                check('nomeAutorizou', 'div-nome-autorizou');
+            }
+
+            if (!isValid) {
+                showToast("Preencha os campos obrigatórios.", "error");
+                if (firstError) firstError.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+            return isValid;
+        }
+
+        function copyScript() {
+            if (!validateForm()) return;
+
+            const solicitacao = document.getElementById('solicitacao').value; // Fixo
+            const taxa = document.getElementById('taxa').value; // Fixo
+            const podeAdiantar = document.querySelector('input[name="podeAdiantar"]:checked').value;
+            const dataAgend = formatDate(document.getElementById('dataAgendamento').value);
+            let periodo = document.getElementById('periodo').value;
+            if (periodo === 'Após') periodo += ` (${document.getElementById('horarioApos').value})`;
+
+            const clienteDesde = document.getElementById('clienteDesde').value;
+            const tel = document.getElementById('contato').value;
+            const endAtual = document.getElementById('enderecoAtual').value;
+            const novoEnd = document.getElementById('novoEndereco').value;
+            const ref = document.getElementById('refNovoEndereco').value;
+            const maps = document.getElementById('locMaps').value;
+
+            const comprovante = document.getElementById('comprovante').value;
+            const temPontoAdicional = document.querySelector('input[name="pontoAdicional"]:checked').value;
+            const eteccResolve = document.getElementById('eteccResolve').value;
+
+            const excecao = document.querySelector('input[name="authExcecao"]:checked').value;
+            let txtExcecao = excecao;
+            if (excecao === 'Sim') txtExcecao += ` (Autorizado por: ${document.getElementById('nomeAutorizou').value})`;
+
+            const atendente = document.getElementById('nomeAtendente').value;
+
+            const script = `
+=== O.S MUDANÇA DE ENDEREÇO ===
+Solicitação: ${solicitacao}
+Pode adiantar? ${podeAdiantar}
+Data: ${dataAgend}
+Período: ${periodo}
+Taxa: ${taxa}
+
+=== CLIENTE ===
+Cliente desde: ${clienteDesde}
+Tel: ${tel}
+
+=== ENDEREÇOS ===
+Atual: ${endAtual}
+Novo: ${novoEnd}
+Ref: ${ref}
+Maps: ${maps}
+
+=== DOCUMENTAÇÃO & DETALHES ===
+Comprovante: ${comprovante}
+Ponto Adicional? ${temPontoAdicional}
+ETECC Resolve (Mudança): ${eteccResolve}
+
+=== AUTORIZAÇÃO / ATENDENTE ===
+Exceção? ${txtExcecao}
+Atendente: ${atendente}
+`.trim();
+
+            const el = document.createElement('textarea');
+            el.value = script;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+
+            showToast("Script copiado com sucesso!", "success");
+        }
+
+        function resetForm() {
+            if (confirm("Limpar formulário? \n(Campos fixos e operador serão mantidos)")) {
+                // 1. Salvar Operador
+                const atendente = document.getElementById('nomeAtendente').value;
+
+                // 2. Resetar
+                document.getElementById('mudancaForm').reset();
+
+                // 3. Restaurar Operador e Campos Fixos (redundante pois o reset volta ao valor 'value' do HTML, mas garantindo)
+                document.getElementById('nomeAtendente').value = atendente;
+                document.getElementById('solicitacao').value = "MUDANÇA DE ENDEREÇO";
+                document.getElementById('taxa').value = "ISENTO";
+
+                // 4. Resetar visuais
+                toggleHorarioApos();
+                toggleAlertPonto(false);
+                toggleExcecao(false);
+
+                // 5. Limpar erros
+                document.querySelectorAll('.border-red-500').forEach(e => e.classList.remove('border-red-500', 'ring-1', 'ring-red-500'));
+
+                // 6. Salvar
+                saveState();
+                showToast("Formulário limpo.", "info");
+            }
+        }
+    </script>
+</body>
+
+</html>
