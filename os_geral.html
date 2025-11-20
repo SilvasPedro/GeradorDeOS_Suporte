@@ -223,7 +223,7 @@
                                 <input type="text" id="sinalStatus" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="-20dbm / Online">
                             </div>
                             <div>
-                                <label for="historicoQuedas">Histórico de Quedas / Logs</label>
+                                <label for="historicoQuedas">Histórico de Quedas / Logs <span class="text-gray-400 font-normal text-xs">(Opcional)</span></label>
                                 <textarea id="historicoQuedas" rows="2" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm" placeholder="Copie os logs relevantes aqui..."></textarea>
                             </div>
                         </div>
@@ -498,7 +498,7 @@
             checkField('clienteDesde');
             checkField('solicitacao');
             checkField('sinalStatus');
-            checkField('historicoQuedas');
+            // checkField('historicoQuedas'); // Removido para ser opcional
             checkField('nomeAtendente');
 
             const hasRecentOS = document.querySelector('input[name="recentOS"]:checked').value === 'Sim';

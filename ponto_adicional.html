@@ -101,7 +101,7 @@
         <main class="flex-1 p-4 md:p-8 overflow-y-auto">
             
             <div class="mb-6 flex justify-between items-center">
-                <h2 class="text-2xl font-bold text-gray-800">O.S. Ponto Adicional</h2>
+                <h2 class="text-2xl font-bold text-gray-800">O.S. Ponto Adicional / Cabear Dispositivo</h2>
                 <span class="text-sm text-gray-500 bg-white px-3 py-1 rounded shadow-sm border">
                     <i data-lucide="calendar" class="w-3 h-3 inline mr-1"></i> Hoje
                 </span>
@@ -122,12 +122,19 @@
                             </div>
                             <div>
                                 <label for="periodo">Período</label>
-                                <select id="periodo" class="w-full p-2 border border-gray-300 rounded focus:ring-purple-500 focus:border-purple-500 bg-white text-sm">
+                                <select id="periodo" onchange="toggleHorarioApos()" class="w-full p-2 border border-gray-300 rounded focus:ring-purple-500 focus:border-purple-500 bg-white text-sm">
                                     <option value="">Selecione...</option>
-                                    <option value="Manhã">Manhã (09:00 a 12:30)</option>
-                                    <option value="Tarde">Tarde (13:00 a 17:30)</option>
                                     <option value="Comercial">Comercial</option>
+                                    <option value="Primeira do dia">Primeira do dia</option>
+                                    <option value="Manhã">Manhã</option>
+                                    <option value="Tarde">Tarde</option>
+                                    <option value="Última do dia">Última do dia</option>
+                                    <option value="Após">Após (Informar Horário)</option>
                                 </select>
+                            </div>
+                            <div id="div-horario-apos" class="hidden animate-fade-in">
+                                <label for="horarioApos">Horário Específico</label>
+                                <input type="text" id="horarioApos" placeholder="Ex: 17:30" class="w-full p-2 border border-gray-300 rounded focus:ring-purple-500 focus:border-purple-500 text-sm">
                             </div>
                             <div>
                                 <label for="solicitacao">Solicitação</label>
@@ -199,11 +206,23 @@
                                 </div>
 
                                 <div>
-                                    <label for="roteadorPontoAdicional" class="block text-sm font-medium text-gray-700 mb-1">Roteador do ponto adicional</label>
-                                    <select id="roteadorPontoAdicional" class="w-full p-2 border border-gray-300 rounded focus:ring-orange-500 focus:border-orange-500 bg-white text-sm">
+                                    <span class="block text-sm font-medium text-gray-700 mb-1">Será necessário roteador?</span>
+                                    <div class="flex gap-4">
+                                        <label class="flex items-center gap-2 cursor-pointer text-sm bg-gray-50 px-3 py-1 rounded border">
+                                            <input type="radio" name="necessarioRoteador" value="Sim" onchange="toggleRoteador(true)" class="text-orange-600 focus:ring-orange-500"> Sim
+                                        </label>
+                                        <label class="flex items-center gap-2 cursor-pointer text-sm bg-gray-50 px-3 py-1 rounded border">
+                                            <input type="radio" name="necessarioRoteador" value="Não" onchange="toggleRoteador(false)" checked class="text-orange-600 focus:ring-orange-500"> Não
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div id="div-tipo-roteador" class="hidden animate-fade-in bg-orange-50 p-3 rounded border border-orange-100">
+                                    <label for="tipoRoteador" class="block text-sm font-bold text-orange-800 mb-1">Qual o tipo do roteador?</label>
+                                    <select id="tipoRoteador" class="w-full p-2 border border-gray-300 rounded focus:ring-orange-500 focus:border-orange-500 bg-white text-sm">
                                         <option value="">Selecione...</option>
-                                        <option value="Do Cliente">Do Cliente</option>
                                         <option value="Comodato">Comodato</option>
+                                        <option value="Compra">Compra</option>
                                     </select>
                                 </div>
                             </div>
@@ -316,6 +335,26 @@
 
         // --- Controle de Visibilidade ---
 
+        function toggleHorarioApos() {
+            const periodo = document.getElementById('periodo').value;
+            const div = document.getElementById('div-horario-apos');
+            if (periodo === 'Após') {
+                div.classList.remove('hidden');
+            } else {
+                div.classList.add('hidden');
+                document.getElementById('horarioApos').value = '';
+            }
+        }
+
+        function toggleRoteador(show) {
+            const div = document.getElementById('div-tipo-roteador');
+            if (show) div.classList.remove('hidden');
+            else {
+                div.classList.add('hidden');
+                document.getElementById('tipoRoteador').value = '';
+            }
+        }
+
         function toggleCusto(show) {
             const div = document.getElementById('div-detalhes-custo');
             if (show) div.classList.remove('hidden');
@@ -371,6 +410,7 @@
             const data = {
                 dataAgendamento: document.getElementById('dataAgendamento').value,
                 periodo: document.getElementById('periodo').value,
+                horarioApos: document.getElementById('horarioApos').value,
                 solicitacao: document.getElementById('solicitacao').value,
                 contato: document.getElementById('contato').value,
                 planoAtual: document.getElementById('planoAtual').value,
@@ -379,7 +419,8 @@
                 clienteDesde: document.getElementById('clienteDesde').value,
                 
                 upgrade: document.querySelector('input[name="upgrade"]:checked').value,
-                roteadorPontoAdicional: document.getElementById('roteadorPontoAdicional').value,
+                necessarioRoteador: document.querySelector('input[name="necessarioRoteador"]:checked').value,
+                tipoRoteador: document.getElementById('tipoRoteador').value,
                 
                 gerarCusto: document.querySelector('input[name="gerarCusto"]:checked').value,
                 cienteCusto: document.querySelector('input[name="cienteCusto"]:checked')?.value || '',
@@ -411,13 +452,14 @@
 
                 setVal('dataAgendamento', data.dataAgendamento);
                 setVal('periodo', data.periodo);
+                setVal('horarioApos', data.horarioApos);
                 setVal('solicitacao', data.solicitacao);
                 setVal('contato', data.contato);
                 setVal('planoAtual', data.planoAtual);
                 setVal('roteadorPrincipal', data.roteadorPrincipal);
                 setVal('onuPrincipal', data.onuPrincipal);
                 setVal('clienteDesde', data.clienteDesde);
-                setVal('roteadorPontoAdicional', data.roteadorPontoAdicional);
+                setVal('tipoRoteador', data.tipoRoteador);
                 setVal('valorCusto', data.valorCusto);
                 setVal('vencimentoCusto', data.vencimentoCusto);
                 setVal('baixaAvaliacao', data.baixaAvaliacao);
@@ -427,12 +469,15 @@
                 if (data.custoPorMetro) document.getElementById('custoPorMetro').checked = true;
 
                 setRadio('upgrade', data.upgrade);
+                setRadio('necessarioRoteador', data.necessarioRoteador);
                 setRadio('gerarCusto', data.gerarCusto);
                 if(data.cienteCusto) setRadio('cienteCusto', data.cienteCusto);
                 setRadio('avaliacaoTecnica', data.avaliacaoTecnica);
                 setRadio('authExcecao', data.authExcecao);
 
                 // Atualizar UI
+                toggleHorarioApos();
+                toggleRoteador(data.necessarioRoteador === 'Sim');
                 toggleCusto(data.gerarCusto === 'Sim');
                 toggleAvaliacao(data.avaliacaoTecnica === 'Sim');
                 toggleExcecao(data.authExcecao === 'Sim');
@@ -468,15 +513,19 @@
 
             check('dataAgendamento');
             check('periodo');
+            check('horarioApos', 'div-horario-apos');
             check('solicitacao');
             check('contato');
             check('planoAtual');
             check('roteadorPrincipal');
             check('onuPrincipal');
-            check('roteadorPontoAdicional');
             check('nomeAtendente');
 
             // Condicionais
+            if(document.querySelector('input[name="necessarioRoteador"]:checked').value === 'Sim') {
+                check('tipoRoteador', 'div-tipo-roteador');
+            }
+
             if(document.querySelector('input[name="gerarCusto"]:checked').value === 'Sim') {
                 // Validar radio ciente
                 if(!document.querySelector('input[name="cienteCusto"]:checked')) {
@@ -508,7 +557,9 @@
             if (!validateForm()) return;
 
             const dataAgend = formatDate(document.getElementById('dataAgendamento').value);
-            const periodo = document.getElementById('periodo').value;
+            let periodo = document.getElementById('periodo').value;
+            if(periodo === 'Após') periodo += ` (${document.getElementById('horarioApos').value})`;
+
             const solicitacao = document.getElementById('solicitacao').value;
             
             const contato = document.getElementById('contato').value;
@@ -518,7 +569,12 @@
             const clienteDesde = document.getElementById('clienteDesde').value;
 
             const upgrade = document.querySelector('input[name="upgrade"]:checked').value;
-            const routerAdicional = document.getElementById('roteadorPontoAdicional').value;
+            
+            const necessitaRoteador = document.querySelector('input[name="necessarioRoteador"]:checked').value;
+            let infoRoteador = `Necessita Roteador? ${necessitaRoteador}`;
+            if (necessitaRoteador === 'Sim') {
+                infoRoteador += `\nTipo Roteador: ${document.getElementById('tipoRoteador').value}`;
+            }
             
             // Lógica Custo
             const geraCusto = document.querySelector('input[name="gerarCusto"]:checked').value;
@@ -564,7 +620,7 @@ Cliente desde: ${clienteDesde}
 
 === INFORMAÇÕES DA O.S ===
 Upgrade? ${upgrade}
-Roteador Ponto Adicional: ${routerAdicional}
+${infoRoteador}
 ${textoCusto}
 
 === AVALIAÇÃO TÉCNICA ===
@@ -592,6 +648,8 @@ Atendente: ${atendente}
                 document.getElementById('nomeAtendente').value = atendente;
                 
                 // Reset visual blocks
+                toggleHorarioApos();
+                toggleRoteador(false);
                 toggleCusto(false);
                 toggleAvaliacao(false);
                 toggleExcecao(false);

@@ -131,8 +131,15 @@
                             </div>
                             <div>
                                 <label for="cpfCnpj">CPF / CNPJ</label>
-                                <input type="text" id="cpfCnpj" placeholder="000.000.000-00"
-                                    class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                <div class="flex gap-2">
+                                    <input type="text" id="cpfCnpj" placeholder="Digite apenas números"
+                                        maxlength="18" oninput="handleCpfCnpj(this)"
+                                        class="flex-grow p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                    <button type="button" onclick="copyCpfCnpj()" title="Copiar CPF/CNPJ"
+                                        class="bg-gray-100 hover:bg-gray-200 text-gray-600 border border-gray-300 px-3 rounded transition">
+                                        <i data-lucide="copy" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
                             </div>
                             <div>
                                 <label for="telefoneContato">Telefone para Contato</label>
@@ -212,8 +219,46 @@
             }, 3000);
         }
 
+        // --- Máscara CPF/CNPJ ---
+        function handleCpfCnpj(input) {
+            let v = input.value.replace(/\D/g, ""); // Remove tudo o que não é dígito
+            
+            if (v.length > 14) v = v.slice(0, 14); // Limita a 14 números
+
+            if (v.length > 11) {
+                // CNPJ (99.999.999/9999-99)
+                v = v.replace(/^(\d{2})(\d)/, "$1.$2");
+                v = v.replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3");
+                v = v.replace(/\.(\d{3})(\d)/, ".$1/$2");
+                v = v.replace(/(\d{4})(\d)/, "$1-$2");
+            } else {
+                // CPF (999.999.999-99)
+                v = v.replace(/(\d{3})(\d)/, "$1.$2");
+                v = v.replace(/(\d{3})(\d)/, "$1.$2");
+                v = v.replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+            }
+
+            input.value = v;
+        }
+
+        function copyCpfCnpj() {
+            const val = document.getElementById('cpfCnpj').value;
+            if (!val) {
+                showToast("Campo vazio.", "error");
+                return;
+            }
+            
+            const el = document.createElement('textarea');
+            el.value = val;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+            
+            showToast("CPF/CNPJ copiado!", "info");
+        }
+
         // --- LOCAL STORAGE (Salvar/Carregar) ---
-        // Usamos uma chave diferente ('aberturaAtendimentoData') para não conflitar com a O.S Geral
         function saveState() {
             const data = {
                 nomeCliente: document.getElementById('nomeCliente').value,
@@ -281,7 +326,7 @@
             if (!validateForm()) return;
 
             const nomeCliente = document.getElementById('nomeCliente').value;
-            const cpfCnpj = document.getElementById('cpfCnpj').value;
+            // CPF/CNPJ não é lido aqui propositalmente
             const telefone = document.getElementById('telefoneContato').value;
             const problema = document.getElementById('problemaRelatado').value;
             const atendente = document.getElementById('nomeAtendente').value;
@@ -289,7 +334,6 @@
             const finalScript = `
 === ABERTURA DE ATENDIMENTO ===
 Cliente: ${nomeCliente}
-CPF/CNPJ: ${cpfCnpj}
 Contato: ${telefone}
 
 === PROBLEMA RELATADO ===
