@@ -262,6 +262,22 @@
                                         <input type="date" id="vencimentoCusto" class="w-full p-1.5 border border-gray-300 rounded text-sm">
                                     </div>
                                 </div>
+
+                                <div id="div-motivo-isencao" class="animate-fade-in border-t border-orange-200 pt-3">
+                                    <label for="motivoIsencao" class="block text-sm font-bold text-orange-800 mb-1">Motivo da Isenção</label>
+                                    <select id="motivoIsencao" onchange="toggleMotivoOutro()" class="w-full p-2 border border-gray-300 rounded focus:ring-orange-500 focus:border-orange-500 bg-white text-sm mb-2">
+                                        <option value="">Selecione...</option>
+                                        <option value="Cliente antigo">Cliente antigo</option>
+                                        <option value="Primeira isenção">Primeira isenção</option>
+                                        <option value="Ameaçou cancelamento">Ameaçou cancelamento</option>
+                                        <option value="Autorizado diretoria">Autorizado diretoria</option>
+                                        <option value="Outro">Outro</option>
+                                    </select>
+                                    
+                                    <div id="div-motivo-outro" class="hidden animate-fade-in">
+                                        <input type="text" id="motivoOutroTexto" placeholder="Digite o motivo específico..." class="w-full p-2 border border-orange-300 rounded focus:ring-orange-500 focus:border-orange-500 text-sm">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -355,17 +371,41 @@
             }
         }
 
-        function toggleCusto(show) {
-            const div = document.getElementById('div-detalhes-custo');
-            if (show) div.classList.remove('hidden');
-            else {
-                div.classList.add('hidden');
-                // Limpar campos internos ao esconder
+        function toggleCusto(gerar) {
+            const divDetalhes = document.getElementById('div-detalhes-custo');
+            const divIsencao = document.getElementById('div-motivo-isencao');
+            
+            if (gerar) {
+                // Se Gera Custo = Sim
+                divDetalhes.classList.remove('hidden');
+                divIsencao.classList.add('hidden');
+                
+                // Limpar campos de isenção
+                document.getElementById('motivoIsencao').value = '';
+                document.getElementById('motivoOutroTexto').value = '';
+                toggleMotivoOutro(); 
+            } else {
+                // Se Gera Custo = Não (Isento)
+                divDetalhes.classList.add('hidden');
+                divIsencao.classList.remove('hidden');
+                
+                // Limpar campos de custo
                 document.getElementById('valorCusto').value = '';
                 document.getElementById('vencimentoCusto').value = '';
                 document.getElementById('custoPorMetro').checked = false;
                 const radios = document.querySelectorAll('input[name="cienteCusto"]');
                 radios.forEach(r => r.checked = false);
+            }
+        }
+
+        function toggleMotivoOutro() {
+            const motivo = document.getElementById('motivoIsencao').value;
+            const divOutro = document.getElementById('div-motivo-outro');
+            if (motivo === 'Outro') {
+                divOutro.classList.remove('hidden');
+            } else {
+                divOutro.classList.add('hidden');
+                document.getElementById('motivoOutroTexto').value = '';
             }
         }
 
@@ -423,10 +463,16 @@
                 tipoRoteador: document.getElementById('tipoRoteador').value,
                 
                 gerarCusto: document.querySelector('input[name="gerarCusto"]:checked').value,
+                
+                // Campos de Custo (Sim)
                 cienteCusto: document.querySelector('input[name="cienteCusto"]:checked')?.value || '',
                 valorCusto: document.getElementById('valorCusto').value,
                 custoPorMetro: document.getElementById('custoPorMetro').checked,
                 vencimentoCusto: document.getElementById('vencimentoCusto').value,
+                
+                // Campos de Isenção (Não)
+                motivoIsencao: document.getElementById('motivoIsencao').value,
+                motivoOutroTexto: document.getElementById('motivoOutroTexto').value,
                 
                 avaliacaoTecnica: document.querySelector('input[name="avaliacaoTecnica"]:checked').value,
                 baixaAvaliacao: document.getElementById('baixaAvaliacao').value,
@@ -462,6 +508,8 @@
                 setVal('tipoRoteador', data.tipoRoteador);
                 setVal('valorCusto', data.valorCusto);
                 setVal('vencimentoCusto', data.vencimentoCusto);
+                setVal('motivoIsencao', data.motivoIsencao);
+                setVal('motivoOutroTexto', data.motivoOutroTexto);
                 setVal('baixaAvaliacao', data.baixaAvaliacao);
                 setVal('nomeAutorizou', data.nomeAutorizou);
                 setVal('nomeAtendente', data.nomeAtendente);
@@ -479,6 +527,7 @@
                 toggleHorarioApos();
                 toggleRoteador(data.necessarioRoteador === 'Sim');
                 toggleCusto(data.gerarCusto === 'Sim');
+                toggleMotivoOutro();
                 toggleAvaliacao(data.avaliacaoTecnica === 'Sim');
                 toggleExcecao(data.authExcecao === 'Sim');
 
@@ -526,14 +575,21 @@
                 check('tipoRoteador', 'div-tipo-roteador');
             }
 
-            if(document.querySelector('input[name="gerarCusto"]:checked').value === 'Sim') {
-                // Validar radio ciente
+            const gerarCusto = document.querySelector('input[name="gerarCusto"]:checked').value;
+            if(gerarCusto === 'Sim') {
+                // Validar radio ciente e campos de custo
                 if(!document.querySelector('input[name="cienteCusto"]:checked')) {
                     isValid = false;
                     showToast("Informe se o cliente está ciente do custo.", "error");
                 }
                 check('valorCusto', 'div-detalhes-custo');
                 check('vencimentoCusto', 'div-detalhes-custo');
+            } else {
+                // Se não gera custo (Isento), validar motivo
+                check('motivoIsencao', 'div-motivo-isencao');
+                if (document.getElementById('motivoIsencao').value === 'Outro') {
+                    check('motivoOutroTexto', 'div-motivo-outro');
+                }
             }
 
             if(document.querySelector('input[name="avaliacaoTecnica"]:checked').value === 'Sim') {
@@ -578,8 +634,10 @@
             
             // Lógica Custo
             const geraCusto = document.querySelector('input[name="gerarCusto"]:checked').value;
-            let textoCusto = `GERAR CUSTO: ${geraCusto}`;
+            let textoCusto = "";
+            
             if (geraCusto === 'Sim') {
+                textoCusto = `GERAR CUSTO: Sim`;
                 const ciente = document.querySelector('input[name="cienteCusto"]:checked').value;
                 const valor = document.getElementById('valorCusto').value;
                 const isMetro = document.getElementById('custoPorMetro').checked ? "(Cobrado por metro)" : "";
@@ -589,6 +647,11 @@
    - Cliente Ciente: ${ciente}
    - Valor: R$ ${valor} ${isMetro}
    - Vencimento: ${vcto}`;
+            } else {
+                // Isento
+                let motivo = document.getElementById('motivoIsencao').value;
+                if (motivo === 'Outro') motivo = document.getElementById('motivoOutroTexto').value;
+                textoCusto = `GERAR CUSTO: Não (Isento - Motivo: ${motivo})`;
             }
 
             // Lógica Avaliação
@@ -650,7 +713,11 @@ Atendente: ${atendente}
                 // Reset visual blocks
                 toggleHorarioApos();
                 toggleRoteador(false);
+                
+                // Reseta estado do custo para 'Não' (default do HTML checked)
                 toggleCusto(false);
+                toggleMotivoOutro();
+
                 toggleAvaliacao(false);
                 toggleExcecao(false);
                 
