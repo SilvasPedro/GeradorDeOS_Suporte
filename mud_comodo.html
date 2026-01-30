@@ -196,6 +196,22 @@
                                 </div>
                             </div>
 
+                            <div id="div-motivo-isencao" class="hidden animate-fade-in border-t border-orange-200 pt-3">
+                                <label for="motivoIsencao" class="block text-sm font-bold text-orange-800 mb-1">Motivo da Isenção</label>
+                                <select id="motivoIsencao" onchange="toggleMotivoOutro()" class="w-full p-2 border border-gray-300 rounded focus:ring-orange-500 focus:border-orange-500 bg-white text-sm mb-2">
+                                    <option value="">Selecione...</option>
+                                    <option value="Cliente antigo">Cliente antigo</option>
+                                    <option value="Primeira isenção">Primeira isenção</option>
+                                    <option value="Ameaçou cancelamento">Ameaçou cancelamento</option>
+                                    <option value="Autorizado diretoria">Autorizado diretoria</option>
+                                    <option value="Outro">Outro</option>
+                                </select>
+                                
+                                <div id="div-motivo-outro" class="hidden animate-fade-in">
+                                    <input type="text" id="motivoOutroTexto" placeholder="Digite o motivo específico..." class="w-full p-2 border border-orange-300 rounded focus:ring-orange-500 focus:border-orange-500 text-sm">
+                                </div>
+                            </div>
+
                             <div id="div-ciente-custo" class="animate-fade-in border-t border-orange-200 pt-3">
                                 <span class="block text-sm font-medium text-gray-800 mb-2">Cliente ciente da possibilidade de ser gerado custo?</span>
                                 <div class="flex gap-4">
@@ -273,13 +289,36 @@
 
         function toggleCusto(isento) {
             const divCiente = document.getElementById('div-ciente-custo');
+            const divMotivo = document.getElementById('div-motivo-isencao');
+            
             if (isento) {
+                // Se for isento: Mostra motivo, esconde pergunta de ciente
+                divMotivo.classList.remove('hidden');
                 divCiente.classList.add('hidden');
-                // Limpa seleção dos radios
+                
+                // Limpa seleção dos radios de ciente
                 const radios = document.querySelectorAll('input[name="cienteCusto"]');
                 radios.forEach(r => r.checked = false);
             } else {
+                // Se NÃO for isento: Esconde motivo, mostra pergunta de ciente
+                divMotivo.classList.add('hidden');
                 divCiente.classList.remove('hidden');
+                
+                // Limpa campos de motivo
+                document.getElementById('motivoIsencao').value = '';
+                document.getElementById('motivoOutroTexto').value = '';
+                toggleMotivoOutro(); // Esconde o input de texto
+            }
+        }
+
+        function toggleMotivoOutro() {
+            const motivo = document.getElementById('motivoIsencao').value;
+            const divOutro = document.getElementById('div-motivo-outro');
+            if (motivo === 'Outro') {
+                divOutro.classList.remove('hidden');
+            } else {
+                divOutro.classList.add('hidden');
+                document.getElementById('motivoOutroTexto').value = '';
             }
         }
 
@@ -324,6 +363,10 @@
                 solicitacao: document.getElementById('solicitacao').value,
                 
                 isentoCusto: document.querySelector('input[name="isentoCusto"]:checked').value,
+                // Salva motivo se existir
+                motivoIsencao: document.getElementById('motivoIsencao').value,
+                motivoOutroTexto: document.getElementById('motivoOutroTexto').value,
+                
                 cienteCusto: document.querySelector('input[name="cienteCusto"]:checked') ? document.querySelector('input[name="cienteCusto"]:checked').value : '',
                 
                 authExcecao: document.querySelector('input[name="authExcecao"]:checked').value,
@@ -355,6 +398,10 @@
                 setVal('solicitacao', data.solicitacao);
                 
                 setRadio('isentoCusto', data.isentoCusto);
+                
+                setVal('motivoIsencao', data.motivoIsencao);
+                setVal('motivoOutroTexto', data.motivoOutroTexto);
+
                 if (data.cienteCusto) setRadio('cienteCusto', data.cienteCusto);
                 
                 setRadio('authExcecao', data.authExcecao);
@@ -364,6 +411,7 @@
                 // Atualiza visuais
                 toggleHorarioApos();
                 toggleCusto(data.isentoCusto === 'Sim');
+                toggleMotivoOutro(); // Verifica se precisa mostrar o campo Outro
                 toggleExcecao(data.authExcecao === 'Sim');
 
             } catch(e) { console.error("Erro ao carregar", e); }
@@ -403,11 +451,21 @@
             check('solicitacao');
             check('nomeAtendente');
             
-            // Valida radio ciente custo se não for isento
+            // Validação de Custo
             const isento = document.querySelector('input[name="isentoCusto"]:checked').value;
-            if (isento === 'Não' && !document.querySelector('input[name="cienteCusto"]:checked')) {
-                isValid = false;
-                showToast("Informe se o cliente está ciente do custo.", "error");
+            
+            if (isento === 'Sim') {
+                // Se isento, valida motivo
+                check('motivoIsencao', 'div-motivo-isencao');
+                if (document.getElementById('motivoIsencao').value === 'Outro') {
+                    check('motivoOutroTexto', 'div-motivo-outro');
+                }
+            } else {
+                // Se não isento, valida se ciente
+                if (!document.querySelector('input[name="cienteCusto"]:checked')) {
+                    isValid = false;
+                    showToast("Informe se o cliente está ciente do custo.", "error");
+                }
             }
 
             if(document.querySelector('input[name="authExcecao"]:checked').value === 'Sim') {
@@ -440,7 +498,11 @@
             const isento = document.querySelector('input[name="isentoCusto"]:checked').value;
             let infoCusto = "";
             if (isento === 'Sim') {
-                infoCusto = "ISENTO";
+                let motivo = document.getElementById('motivoIsencao').value;
+                if (motivo === 'Outro') {
+                    motivo = document.getElementById('motivoOutroTexto').value;
+                }
+                infoCusto = `ISENTO (Motivo: ${motivo})`;
             } else {
                 const ciente = document.querySelector('input[name="cienteCusto"]:checked').value;
                 infoCusto = `Cliente ciente da possibilidade de custo? ${ciente}`;
@@ -491,11 +553,11 @@ Atendente: ${atendente}
                 
                 // Restaura
                 document.getElementById('nomeAtendente').value = atendente;
-                document.getElementById('solicitacao').value = "MUDANÇA DE COMODO"; // Reset default value
+                document.getElementById('solicitacao').value = "MUDANÇA DE COMODO"; 
 
                 // Reset visual
                 toggleHorarioApos();
-                toggleCusto(false); // Reseta para o estado "Não isento" que é o checked padrão no HTML, ou true se preferir
+                
                 // Ajustando para o padrão do HTML (Isento: Não)
                 document.querySelector('input[name="isentoCusto"][value="Não"]').checked = true;
                 toggleCusto(false);
