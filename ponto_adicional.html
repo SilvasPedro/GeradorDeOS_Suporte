@@ -57,7 +57,7 @@
         
         <aside class="bg-slate-900 text-white w-full md:w-64 flex-shrink-0 md:min-h-screen flex flex-col">
             <div class="p-6 bg-slate-950 flex items-center gap-3">
-                <i data-lucide="activity" class="text-blue-400"></i>
+                <i data-lucide="activity" class="text-red-400"></i>
                 <span class="text-lg font-bold tracking-wide">ServiceDesk</span>
             </div>
             <nav class="flex-grow p-4 space-y-1">
@@ -80,7 +80,7 @@
                     <i data-lucide="sofa" class="w-5 h-5"></i>
                     <span class="font-medium">Mudança Cômodo</span>
                 </a>
-                <a href="ponto_adicional.html" class="flex items-center gap-3 px-4 py-3 bg-blue-600 text-white rounded-lg shadow-sm transition-all">
+                <a href="ponto_adicional.html" class="flex items-center gap-3 px-4 py-3 bg-red-600 text-white rounded-lg shadow-sm transition-all">
                     <i data-lucide="network" class="w-5 h-5"></i>
                     <span class="font-medium">Ponto Adicional</span>
                 </a>
@@ -111,18 +111,18 @@
 
                 <form id="pontoAdicionalForm" class="grid grid-cols-1 lg:grid-cols-12 gap-4" onsubmit="event.preventDefault()">
                     
-                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-4 flex flex-col h-full border-t-4 border-purple-500">
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-4 flex flex-col h-full border-t-4 border-red-500">
                         <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
-                            <i data-lucide="calendar-clock" class="w-4 h-4 text-purple-500"></i> O.S Ponto Adicional
+                            <i data-lucide="calendar-clock" class="w-4 h-4 text-red-500"></i> O.S Ponto Adicional
                         </h2>
                         <div class="space-y-3 flex-grow">
                             <div>
                                 <label for="dataAgendamento">Data de Agendamento</label>
-                                <input type="date" id="dataAgendamento" class="w-full p-2 border border-gray-300 rounded focus:ring-purple-500 focus:border-purple-500 text-sm">
+                                <input type="date" id="dataAgendamento" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 text-sm">
                             </div>
                             <div>
                                 <label for="periodo">Período</label>
-                                <select id="periodo" onchange="toggleHorarioApos()" class="w-full p-2 border border-gray-300 rounded focus:ring-purple-500 focus:border-purple-500 bg-white text-sm">
+                                <select id="periodo" onchange="toggleHorarioApos()" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 bg-white text-sm">
                                     <option value="">Selecione...</option>
                                     <option value="Comercial">Comercial</option>
                                     <option value="Primeira do dia">Primeira do dia</option>
@@ -134,27 +134,27 @@
                             </div>
                             <div id="div-horario-apos" class="hidden animate-fade-in">
                                 <label for="horarioApos">Horário Específico</label>
-                                <input type="text" id="horarioApos" placeholder="Ex: 17:30" class="w-full p-2 border border-gray-300 rounded focus:ring-purple-500 focus:border-purple-500 text-sm">
+                                <input type="text" id="horarioApos" placeholder="Ex: 17:30" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 text-sm">
                             </div>
                             <div>
                                 <label for="solicitacao">Solicitação</label>
-                                <textarea id="solicitacao" rows="3" class="w-full p-2 border border-gray-300 rounded focus:ring-purple-500 focus:border-purple-500 text-sm" placeholder="Detalhes da solicitação..."></textarea>
+                                <textarea id="solicitacao" rows="3" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 text-sm" placeholder="Detalhes da solicitação..."></textarea>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-8 flex flex-col h-full border-t-4 border-blue-500">
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-8 flex flex-col h-full border-t-4 border-red-500">
                         <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
-                            <i data-lucide="user" class="w-4 h-4 text-blue-500"></i> Informações do Cliente
+                            <i data-lucide="user" class="w-4 h-4 text-red-500"></i> Informações do Cliente
                         </h2>
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                             <div>
                                 <label for="contato">Contato</label>
-                                <input type="text" id="contato" placeholder="(XX) XXXXX-XXXX" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                <input type="text" id="contato" placeholder="(XX) XXXXX-XXXX" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 text-sm">
                             </div>
                             <div>
                                 <label for="planoAtual">Plano Atual</label>
-                                <select id="planoAtual" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 bg-white text-sm">
+                                <select id="planoAtual" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 bg-white text-sm">
                                     <option value="">Selecione...</option>
                                     <option value="10Mbps">10Mbps</option>
                                     <option value="100Mbps">100Mbps</option>
@@ -165,11 +165,11 @@
                             </div>
                             <div>
                                 <label for="clienteDesde">Cliente Desde</label>
-                                <input type="text" id="clienteDesde" placeholder="Ex: 05/2021" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                <input type="text" id="clienteDesde" placeholder="Ex: 05/2021" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 text-sm">
                             </div>
                             <div>
                                 <label for="roteadorPrincipal">Roteador (Principal)</label>
-                                <select id="roteadorPrincipal" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 bg-white text-sm">
+                                <select id="roteadorPrincipal" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 bg-white text-sm">
                                     <option value="">Selecione...</option>
                                     <option value="Comodato">Comodato</option>
                                     <option value="Compra">Compra</option>
@@ -177,7 +177,7 @@
                             </div>
                             <div>
                                 <label for="onuPrincipal">ONU</label>
-                                <select id="onuPrincipal" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 bg-white text-sm">
+                                <select id="onuPrincipal" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 bg-white text-sm">
                                     <option value="">Selecione...</option>
                                     <option value="Comodato">Comodato</option>
                                     <option value="Compra">Compra</option>
@@ -186,9 +186,9 @@
                         </div>
                     </div>
 
-                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-12 border-t-4 border-orange-500">
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-12 border-t-4 border-red-500">
                         <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
-                            <i data-lucide="settings" class="w-4 h-4 text-orange-500"></i> Informações da O.S.
+                            <i data-lucide="settings" class="w-4 h-4 text-red-500"></i> Informações da O.S.
                         </h2>
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -197,10 +197,10 @@
                                     <span class="block text-sm font-medium text-gray-700 mb-1">Cliente realizou upgrade?</span>
                                     <div class="flex gap-4">
                                         <label class="flex items-center gap-2 cursor-pointer text-sm bg-gray-50 px-3 py-1 rounded border">
-                                            <input type="radio" name="upgrade" value="Sim" class="text-orange-600 focus:ring-orange-500"> Sim
+                                            <input type="radio" name="upgrade" value="Sim" class="text-red-600 focus:ring-red-500"> Sim
                                         </label>
                                         <label class="flex items-center gap-2 cursor-pointer text-sm bg-gray-50 px-3 py-1 rounded border">
-                                            <input type="radio" name="upgrade" value="Não" checked class="text-orange-600 focus:ring-orange-500"> Não
+                                            <input type="radio" name="upgrade" value="Não" checked class="text-red-600 focus:ring-red-500"> Não
                                         </label>
                                     </div>
                                 </div>
@@ -209,17 +209,17 @@
                                     <span class="block text-sm font-medium text-gray-700 mb-1">Será necessário roteador?</span>
                                     <div class="flex gap-4">
                                         <label class="flex items-center gap-2 cursor-pointer text-sm bg-gray-50 px-3 py-1 rounded border">
-                                            <input type="radio" name="necessarioRoteador" value="Sim" onchange="toggleRoteador(true)" class="text-orange-600 focus:ring-orange-500"> Sim
+                                            <input type="radio" name="necessarioRoteador" value="Sim" onchange="toggleRoteador(true)" class="text-red-600 focus:ring-red-500"> Sim
                                         </label>
                                         <label class="flex items-center gap-2 cursor-pointer text-sm bg-gray-50 px-3 py-1 rounded border">
-                                            <input type="radio" name="necessarioRoteador" value="Não" onchange="toggleRoteador(false)" checked class="text-orange-600 focus:ring-orange-500"> Não
+                                            <input type="radio" name="necessarioRoteador" value="Não" onchange="toggleRoteador(false)" checked class="text-red-600 focus:ring-red-500"> Não
                                         </label>
                                     </div>
                                 </div>
 
-                                <div id="div-tipo-roteador" class="hidden animate-fade-in bg-orange-50 p-3 rounded border border-orange-100">
-                                    <label for="tipoRoteador" class="block text-sm font-bold text-orange-800 mb-1">Qual o tipo do roteador?</label>
-                                    <select id="tipoRoteador" class="w-full p-2 border border-gray-300 rounded focus:ring-orange-500 focus:border-orange-500 bg-white text-sm">
+                                <div id="div-tipo-roteador" class="hidden animate-fade-in bg-red-50 p-3 rounded border border-red-100">
+                                    <label for="tipoRoteador" class="block text-sm font-bold text-red-800 mb-1">Qual o tipo do roteador?</label>
+                                    <select id="tipoRoteador" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 bg-white text-sm">
                                         <option value="">Selecione...</option>
                                         <option value="Comodato">Comodato</option>
                                         <option value="Compra">Compra</option>
@@ -227,18 +227,18 @@
                                 </div>
                             </div>
 
-                            <div class="bg-orange-50 p-4 rounded border border-orange-100">
-                                <span class="block text-sm font-bold text-orange-800 mb-2">Será gerado custo?</span>
+                            <div class="bg-red-50 p-4 rounded border border-red-100">
+                                <span class="block text-sm font-bold text-red-800 mb-2">Será gerado custo?</span>
                                 <div class="flex gap-4 mb-3">
                                     <label class="flex items-center gap-2 cursor-pointer text-sm">
-                                        <input type="radio" name="gerarCusto" value="Sim" onchange="toggleCusto(true)" class="text-orange-600 focus:ring-orange-500"> Sim
+                                        <input type="radio" name="gerarCusto" value="Sim" onchange="toggleCusto(true)" class="text-red-600 focus:ring-red-500"> Sim
                                     </label>
                                     <label class="flex items-center gap-2 cursor-pointer text-sm">
-                                        <input type="radio" name="gerarCusto" value="Não" onchange="toggleCusto(false)" checked class="text-orange-600 focus:ring-orange-500"> Não
+                                        <input type="radio" name="gerarCusto" value="Não" onchange="toggleCusto(false)" checked class="text-red-600 focus:ring-red-500"> Não
                                     </label>
                                 </div>
 
-                                <div id="div-detalhes-custo" class="hidden space-y-3 animate-fade-in border-t border-orange-200 pt-3">
+                                <div id="div-detalhes-custo" class="hidden space-y-3 animate-fade-in border-t border-red-200 pt-3">
                                     <div>
                                         <span class="block text-xs font-medium text-gray-600 mb-1">Cliente ciente do custo?</span>
                                         <div class="flex gap-3">
@@ -253,7 +253,7 @@
                                         </div>
                                         <div class="flex items-end pb-2">
                                             <label class="flex items-center gap-2 text-xs cursor-pointer">
-                                                <input type="checkbox" id="custoPorMetro" class="rounded text-orange-600"> Cobrar por metro?
+                                                <input type="checkbox" id="custoPorMetro" class="rounded text-red-600"> Cobrar por metro?
                                             </label>
                                         </div>
                                     </div>
@@ -263,9 +263,9 @@
                                     </div>
                                 </div>
 
-                                <div id="div-motivo-isencao" class="animate-fade-in border-t border-orange-200 pt-3">
-                                    <label for="motivoIsencao" class="block text-sm font-bold text-orange-800 mb-1">Motivo da Isenção</label>
-                                    <select id="motivoIsencao" onchange="toggleMotivoOutro()" class="w-full p-2 border border-gray-300 rounded focus:ring-orange-500 focus:border-orange-500 bg-white text-sm mb-2">
+                                <div id="div-motivo-isencao" class="animate-fade-in border-t border-red-200 pt-3">
+                                    <label for="motivoIsencao" class="block text-sm font-bold text-red-800 mb-1">Motivo da Isenção</label>
+                                    <select id="motivoIsencao" onchange="toggleMotivoOutro()" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 bg-white text-sm mb-2">
                                         <option value="">Selecione...</option>
                                         <option value="Cliente antigo">Cliente antigo</option>
                                         <option value="Primeira isenção">Primeira isenção</option>
@@ -275,16 +275,16 @@
                                     </select>
                                     
                                     <div id="div-motivo-outro" class="hidden animate-fade-in">
-                                        <input type="text" id="motivoOutroTexto" placeholder="Digite o motivo específico..." class="w-full p-2 border border-orange-300 rounded focus:ring-orange-500 focus:border-orange-500 text-sm">
+                                        <input type="text" id="motivoOutroTexto" placeholder="Digite o motivo específico..." class="w-full p-2 border border-red-300 rounded focus:ring-red-500 focus:border-red-500 text-sm">
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-6 border-t-4 border-gray-500">
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-6 border-t-4 border-red-500">
                         <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
-                            <i data-lucide="clipboard-check" class="w-4 h-4 text-gray-500"></i> Avaliação Técnica
+                            <i data-lucide="clipboard-check" class="w-4 h-4 text-red-500"></i> Avaliação Técnica
                         </h2>
                         <div>
                             <span class="block text-sm font-medium text-gray-700 mb-2">Já foi feita avaliação técnica?</span>
@@ -303,35 +303,35 @@
                         </div>
                     </div>
 
-                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-6 flex flex-col border-t-4 border-green-500">
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-6 flex flex-col border-t-4 border-red-500">
                         <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
-                            <i data-lucide="shield-check" class="w-4 h-4 text-green-600"></i> Autorização & Atendente
+                            <i data-lucide="shield-check" class="w-4 h-4 text-red-600"></i> Autorização & Atendente
                         </h2>
                         
                         <div class="mb-4">
                             <span class="block text-sm font-medium text-gray-700 mb-2">Autorização por Exceção (Torre)?</span>
                             <div class="flex gap-4 mb-2">
                                 <label class="flex items-center gap-2 cursor-pointer text-sm bg-gray-50 px-3 py-1 rounded border">
-                                    <input type="radio" name="authExcecao" value="Sim" onchange="toggleExcecao(true)" class="text-green-600 focus:ring-green-500"> Sim
+                                    <input type="radio" name="authExcecao" value="Sim" onchange="toggleExcecao(true)" class="text-red-600 focus:ring-red-500"> Sim
                                 </label>
                                 <label class="flex items-center gap-2 cursor-pointer text-sm bg-gray-50 px-3 py-1 rounded border">
-                                    <input type="radio" name="authExcecao" value="Não" onchange="toggleExcecao(false)" checked class="text-green-600 focus:ring-green-500"> Não
+                                    <input type="radio" name="authExcecao" value="Não" onchange="toggleExcecao(false)" checked class="text-red-600 focus:ring-red-500"> Não
                                 </label>
                             </div>
                             <div id="div-nome-autorizou" class="hidden animate-fade-in">
-                                <label for="nomeAutorizou" class="text-xs font-bold text-green-700">Nome de quem autorizou</label>
-                                <input type="text" id="nomeAutorizou" class="w-full p-2 border border-green-200 bg-green-50 rounded focus:ring-green-500 focus:border-green-500 text-sm">
+                                <label for="nomeAutorizou" class="text-xs font-bold text-red-700">Nome de quem autorizou</label>
+                                <input type="text" id="nomeAutorizou" class="w-full p-2 border border-red-200 bg-red-50 rounded focus:ring-red-500 focus:border-red-500 text-sm">
                             </div>
                         </div>
 
                         <div class="mt-auto">
                             <label for="nomeAtendente">Operador / Atendente</label>
-                            <input type="text" id="nomeAtendente" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                            <input type="text" id="nomeAtendente" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 text-sm">
                         </div>
                     </div>
 
                     <div class="lg:col-span-12 flex flex-col sm:flex-row gap-4 pt-4 pb-12">
-                        <button type="button" onclick="copyScript()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow flex justify-center items-center gap-2 transition transform hover:scale-[1.01]">
+                        <button type="button" onclick="copyScript()" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg shadow flex justify-center items-center gap-2 transition transform hover:scale-[1.01]">
                             <i data-lucide="copy"></i> Copiar Script
                         </button>
                         <button type="button" onclick="resetForm()" class="sm:w-auto bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-3 px-6 rounded-lg shadow flex justify-center items-center gap-2 transition">

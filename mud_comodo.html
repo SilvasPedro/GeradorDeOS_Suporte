@@ -58,7 +58,7 @@
         
         <aside class="bg-slate-900 text-white w-full md:w-64 flex-shrink-0 md:min-h-screen flex flex-col">
             <div class="p-6 bg-slate-950 flex items-center gap-3">
-                <i data-lucide="activity" class="text-blue-400"></i>
+                <i data-lucide="activity" class="text-red-400"></i>
                 <span class="text-lg font-bold tracking-wide">ServiceDesk</span>
             </div>
             <nav class="flex-grow p-4 space-y-1">
@@ -77,7 +77,7 @@
                     <i data-lucide="truck" class="w-5 h-5"></i>
                     <span class="font-medium">Mudança Endereço</span>
                 </a>
-                <a href="mud_comodo.html" class="flex items-center gap-3 px-4 py-3 bg-blue-600 text-white rounded-lg shadow-sm transition-all">
+                <a href="mud_comodo.html" class="flex items-center gap-3 px-4 py-3 bg-red-600 text-white rounded-lg shadow-sm transition-all">
                     <i data-lucide="sofa" class="w-5 h-5"></i>
                     <span class="font-medium">Mudança Cômodo</span>
                 </a>
@@ -112,19 +112,19 @@
 
                 <form id="comodoForm" class="grid grid-cols-1 lg:grid-cols-12 gap-4" onsubmit="event.preventDefault()">
                     
-                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-4 border-t-4 border-pink-500 flex flex-col">
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-4 border-t-4 border-red-500 flex flex-col">
                         <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
-                            <i data-lucide="calendar-clock" class="w-4 h-4 text-pink-500"></i> Agendamento
+                            <i data-lucide="calendar-clock" class="w-4 h-4 text-red-500"></i> Agendamento
                         </h2>
                         
                         <div class="space-y-3 flex-grow">
                             <div>
                                 <label for="dataAgendamento">Data de Agendamento</label>
-                                <input type="date" id="dataAgendamento" class="w-full p-2 border border-gray-300 rounded focus:ring-pink-500 focus:border-pink-500 text-sm">
+                                <input type="date" id="dataAgendamento" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 text-sm">
                             </div>
                             <div>
                                 <label for="periodo">Período</label>
-                                <select id="periodo" onchange="toggleHorarioApos()" class="w-full p-2 border border-gray-300 rounded focus:ring-pink-500 focus:border-pink-500 bg-white text-sm">
+                                <select id="periodo" onchange="toggleHorarioApos()" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 bg-white text-sm">
                                     <option value="">Selecione...</option>
                                     <option value="Comercial">Comercial</option>
                                     <option value="Primeira do dia">Primeira do dia</option>
@@ -136,19 +136,19 @@
                             </div>
                             <div id="div-horario-apos" class="hidden animate-fade-in">
                                 <label for="horarioApos">Horário Específico</label>
-                                <input type="text" id="horarioApos" placeholder="Ex: 17:30" class="w-full p-2 border border-gray-300 rounded focus:ring-pink-500 focus:border-pink-500 text-sm">
+                                <input type="text" id="horarioApos" placeholder="Ex: 17:30" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 text-sm">
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-8 border-t-4 border-blue-500 flex flex-col">
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-8 border-t-4 border-red-500 flex flex-col">
                         <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
-                            <i data-lucide="user" class="w-4 h-4 text-blue-500"></i> Informações do Cliente
+                            <i data-lucide="user" class="w-4 h-4 text-red-500"></i> Informações do Cliente
                         </h2>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                             <div>
                                 <label for="roteador">Roteador</label>
-                                <select id="roteador" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 bg-white text-sm">
+                                <select id="roteador" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 bg-white text-sm">
                                     <option value="">Selecione...</option>
                                     <option value="Comodato">Comodato</option>
                                     <option value="Compra">Compra</option>
@@ -156,7 +156,7 @@
                             </div>
                             <div>
                                 <label for="onu">ONU</label>
-                                <select id="onu" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 bg-white text-sm">
+                                <select id="onu" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 bg-white text-sm">
                                     <option value="">Selecione...</option>
                                     <option value="Comodato">Comodato</option>
                                     <option value="Compra">Compra</option>
@@ -164,41 +164,41 @@
                             </div>
                             <div>
                                 <label for="contato">Contato</label>
-                                <input type="text" id="contato" placeholder="(XX) XXXXX-XXXX" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                <input type="text" id="contato" placeholder="(XX) XXXXX-XXXX" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 text-sm">
                             </div>
                             <div>
                                 <label for="clienteDesde">Cliente Desde</label>
-                                <input type="text" id="clienteDesde" placeholder="Ex: 05/2020" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                <input type="text" id="clienteDesde" placeholder="Ex: 05/2020" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 text-sm">
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-6 border-t-4 border-orange-500 flex flex-col">
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-6 border-t-4 border-red-500 flex flex-col">
                         <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
-                            <i data-lucide="file-text" class="w-4 h-4 text-orange-500"></i> Detalhes e Custo
+                            <i data-lucide="file-text" class="w-4 h-4 text-red-500"></i> Detalhes e Custo
                         </h2>
                         
                         <div class="mb-4">
                             <label for="solicitacao" class="font-semibold text-gray-700">Solicitação</label>
-                            <input type="text" id="solicitacao" value="MUDANÇA DE COMODO" class="w-full p-2 border border-gray-300 rounded focus:ring-orange-500 focus:border-orange-500 text-sm">
+                            <input type="text" id="solicitacao" value="MUDANÇA DE COMODO" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 text-sm">
                         </div>
 
-                        <div class="p-4 bg-orange-50 border border-orange-100 rounded">
+                        <div class="p-4 bg-red-50 border border-red-100 rounded">
                             <div class="mb-3">
                                 <span class="block text-sm font-medium text-gray-800 mb-2">Cliente será isento do custo?</span>
                                 <div class="flex gap-4">
                                     <label class="flex items-center gap-2 cursor-pointer text-sm bg-white px-3 py-1.5 rounded border hover:bg-gray-50 transition">
-                                        <input type="radio" name="isentoCusto" value="Sim" onchange="toggleCusto(true)" class="text-orange-600 focus:ring-orange-500"> Sim
+                                        <input type="radio" name="isentoCusto" value="Sim" onchange="toggleCusto(true)" class="text-red-600 focus:ring-red-500"> Sim
                                     </label>
                                     <label class="flex items-center gap-2 cursor-pointer text-sm bg-white px-3 py-1.5 rounded border hover:bg-gray-50 transition">
-                                        <input type="radio" name="isentoCusto" value="Não" onchange="toggleCusto(false)" checked class="text-orange-600 focus:ring-orange-500"> Não
+                                        <input type="radio" name="isentoCusto" value="Não" onchange="toggleCusto(false)" checked class="text-red-600 focus:ring-red-500"> Não
                                     </label>
                                 </div>
                             </div>
 
-                            <div id="div-motivo-isencao" class="hidden animate-fade-in border-t border-orange-200 pt-3">
-                                <label for="motivoIsencao" class="block text-sm font-bold text-orange-800 mb-1">Motivo da Isenção</label>
-                                <select id="motivoIsencao" onchange="toggleMotivoOutro()" class="w-full p-2 border border-gray-300 rounded focus:ring-orange-500 focus:border-orange-500 bg-white text-sm mb-2">
+                            <div id="div-motivo-isencao" class="hidden animate-fade-in border-t border-red-200 pt-3">
+                                <label for="motivoIsencao" class="block text-sm font-bold text-red-800 mb-1">Motivo da Isenção</label>
+                                <select id="motivoIsencao" onchange="toggleMotivoOutro()" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 bg-white text-sm mb-2">
                                     <option value="">Selecione...</option>
                                     <option value="Cliente antigo">Cliente antigo</option>
                                     <option value="Primeira isenção">Primeira isenção</option>
@@ -208,27 +208,27 @@
                                 </select>
                                 
                                 <div id="div-motivo-outro" class="hidden animate-fade-in">
-                                    <input type="text" id="motivoOutroTexto" placeholder="Digite o motivo específico..." class="w-full p-2 border border-orange-300 rounded focus:ring-orange-500 focus:border-orange-500 text-sm">
+                                    <input type="text" id="motivoOutroTexto" placeholder="Digite o motivo específico..." class="w-full p-2 border border-red-300 rounded focus:ring-red-500 focus:border-red-500 text-sm">
                                 </div>
                             </div>
 
-                            <div id="div-ciente-custo" class="animate-fade-in border-t border-orange-200 pt-3">
+                            <div id="div-ciente-custo" class="animate-fade-in border-t border-red-200 pt-3">
                                 <span class="block text-sm font-medium text-gray-800 mb-2">Cliente ciente da possibilidade de ser gerado custo?</span>
                                 <div class="flex gap-4">
                                     <label class="flex items-center gap-2 cursor-pointer text-sm bg-white px-3 py-1.5 rounded border hover:bg-gray-50 transition">
-                                        <input type="radio" name="cienteCusto" value="Sim" class="text-orange-600 focus:ring-orange-500"> Sim
+                                        <input type="radio" name="cienteCusto" value="Sim" class="text-red-600 focus:ring-red-500"> Sim
                                     </label>
                                     <label class="flex items-center gap-2 cursor-pointer text-sm bg-white px-3 py-1.5 rounded border hover:bg-gray-50 transition">
-                                        <input type="radio" name="cienteCusto" value="Não" class="text-orange-600 focus:ring-orange-500"> Não
+                                        <input type="radio" name="cienteCusto" value="Não" class="text-red-600 focus:ring-red-500"> Não
                                     </label>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-6 border-t-4 border-green-500 flex flex-col">
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-6 border-t-4 border-red-500 flex flex-col">
                         <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
-                            <i data-lucide="shield-check" class="w-4 h-4 text-green-600"></i> Autorização & Atendente
+                            <i data-lucide="shield-check" class="w-4 h-4 text-red-600"></i> Autorização & Atendente
                         </h2>
 
                         <div class="flex-grow space-y-4">
@@ -236,27 +236,27 @@
                                 <span class="block text-sm font-medium text-gray-700 mb-2">Autorização por Exceção (Torre)?</span>
                                 <div class="flex gap-4">
                                     <label class="flex items-center gap-2 cursor-pointer text-sm bg-gray-50 px-3 py-1.5 rounded border hover:bg-gray-100 transition">
-                                        <input type="radio" name="authExcecao" value="Sim" onchange="toggleExcecao(true)" class="text-green-600 focus:ring-green-500"> Sim
+                                        <input type="radio" name="authExcecao" value="Sim" onchange="toggleExcecao(true)" class="text-red-600 focus:ring-red-500"> Sim
                                     </label>
                                     <label class="flex items-center gap-2 cursor-pointer text-sm bg-gray-50 px-3 py-1.5 rounded border hover:bg-gray-100 transition">
-                                        <input type="radio" name="authExcecao" value="Não" onchange="toggleExcecao(false)" checked class="text-green-600 focus:ring-green-500"> Não
+                                        <input type="radio" name="authExcecao" value="Não" onchange="toggleExcecao(false)" checked class="text-red-600 focus:ring-red-500"> Não
                                     </label>
                                 </div>
                                 <div id="div-nome-autorizou" class="hidden animate-fade-in mt-2">
-                                    <label for="nomeAutorizou" class="text-xs font-bold text-green-700">Nome de quem autorizou</label>
-                                    <input type="text" id="nomeAutorizou" class="w-full p-2 border border-green-200 bg-green-50 rounded focus:ring-green-500 focus:border-green-500 text-sm">
+                                    <label for="nomeAutorizou" class="text-xs font-bold text-red-700">Nome de quem autorizou</label>
+                                    <input type="text" id="nomeAutorizou" class="w-full p-2 border border-red-200 bg-red-50 rounded focus:ring-red-500 focus:border-red-500 text-sm">
                                 </div>
                             </div>
 
                             <div class="pt-2">
                                 <label for="nomeAtendente">Operador / Atendente</label>
-                                <input type="text" id="nomeAtendente" class="w-full p-2 border border-gray-300 rounded focus:ring-blue-500 focus:border-blue-500 text-sm">
+                                <input type="text" id="nomeAtendente" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 text-sm">
                             </div>
                         </div>
                     </div>
 
                     <div class="lg:col-span-12 flex flex-col sm:flex-row gap-4 pt-4 pb-12">
-                        <button type="button" onclick="copyScript()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow flex justify-center items-center gap-2 transition transform hover:scale-[1.01]">
+                        <button type="button" onclick="copyScript()" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg shadow flex justify-center items-center gap-2 transition transform hover:scale-[1.01]">
                             <i data-lucide="copy"></i> Copiar Script
                         </button>
                         <button type="button" onclick="resetForm()" class="sm:w-auto bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-3 px-6 rounded-lg shadow flex justify-center items-center gap-2 transition">

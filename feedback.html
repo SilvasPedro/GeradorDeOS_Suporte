@@ -58,7 +58,7 @@
         
         <aside class="bg-slate-900 text-white w-full md:w-64 flex-shrink-0 md:min-h-screen flex flex-col">
             <div class="p-6 bg-slate-950 flex items-center gap-3">
-                <i data-lucide="activity" class="text-blue-400"></i>
+                <i data-lucide="activity" class="text-red-400"></i>
                 <span class="text-lg font-bold tracking-wide">ETECC Telecom</span>
             </div>
             <nav class="flex-grow p-4 space-y-1">
@@ -86,7 +86,7 @@
                     <span class="font-medium">Ponto Adicional</span>
                 </a>
                 <a href="feedback.html"
-                    class="flex items-center gap-3 px-4 py-3 bg-blue-600 text-white rounded-lg shadow-sm transition-all
+                    class="flex items-center gap-3 px-4 py-3 bg-red-600 text-white rounded-lg shadow-sm transition-all
 ">
                     <i data-lucide="message-square-heart" class="w-5 h-5"></i>
                     <span class="font-medium">Feedback</span>
@@ -113,55 +113,64 @@
 
                 <form id="feedbackForm" class="grid grid-cols-1 lg:grid-cols-12 gap-4" onsubmit="event.preventDefault()">
                     
-                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-6 border-t-4 border-yellow-500 flex flex-col">
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-6 border-t-4 border-red-500 flex flex-col">
                         <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
-                            <i data-lucide="user" class="w-4 h-4 text-yellow-600"></i> Informações do Cliente
+                            <i data-lucide="user" class="w-4 h-4 text-red-600"></i> Informações do Cliente
                         </h2>
                         <div class="space-y-3 flex-grow">
                             <div>
                                 <label for="nomeCliente">Nome do Cliente</label>
-                                <input type="text" id="nomeCliente" placeholder="Nome completo" class="w-full p-2 border border-gray-300 rounded focus:ring-yellow-500 focus:border-yellow-500 text-sm">
+                                <input type="text" id="nomeCliente" placeholder="Nome completo" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 text-sm">
                             </div>
                             <div>
                                 <label for="telefone">Telefone</label>
-                                <input type="text" id="telefone" placeholder="(XX) XXXXX-XXXX" class="w-full p-2 border border-gray-300 rounded focus:ring-yellow-500 focus:border-yellow-500 text-sm">
+                                <input type="text" id="telefone" placeholder="(XX) XXXXX-XXXX" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 text-sm">
                             </div>
                             <div>
                                 <label for="relatoInicial">Relato Inicial</label>
-                                <textarea id="relatoInicial" rows="3" class="w-full p-2 border border-gray-300 rounded focus:ring-yellow-500 focus:border-yellow-500 text-sm" placeholder="O que motivou o contato ou feedback..."></textarea>
+                                <textarea id="relatoInicial" rows="3" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 text-sm" placeholder="O que motivou o contato ou feedback..."></textarea>
                             </div>
                         </div>
                     </div>
 
-                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-6 border-t-4 border-blue-500 flex flex-col">
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-6 border-t-4 border-red-500 flex flex-col">
                         <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
-                            <i data-lucide="star" class="w-4 h-4 text-blue-500"></i> Avaliação do Google
+                            <i data-lucide="users" class="w-4 h-4 text-red-500"></i> Indicação
                         </h2>
                         
                         <div class="mb-4">
-                            <span class="block text-sm font-medium text-gray-700 mb-2">Cliente aceitou link de avaliação?</span>
+                            <span class="block text-sm font-medium text-gray-700 mb-2">Foi solicitado indicação do cliente?</span>
                             <div class="flex gap-4">
-                                <label class="flex items-center gap-2 cursor-pointer text-sm bg-blue-50 px-4 py-2 rounded border hover:bg-blue-100 transition w-full justify-center">
-                                    <input type="radio" name="aceitouGoogle" value="Sim" onchange="toggleRecusa(false)" class="text-blue-600 focus:ring-blue-500"> 
-                                    <span class="font-semibold text-blue-700">SIM</span>
-                                </label>
                                 <label class="flex items-center gap-2 cursor-pointer text-sm bg-red-50 px-4 py-2 rounded border hover:bg-red-100 transition w-full justify-center">
-                                    <input type="radio" name="aceitouGoogle" value="Não" onchange="toggleRecusa(true)" checked class="text-red-600 focus:ring-red-500"> 
-                                    <span class="font-semibold text-red-700">NÃO</span>
+                                    <input type="radio" name="solicitouIndicacao" value="Sim" onchange="toggleIndicacao(true)" class="text-red-600 focus:ring-red-500"> 
+                                    <span class="font-semibold text-red-700">SIM</span>
+                                </label>
+                                <label class="flex items-center gap-2 cursor-pointer text-sm bg-gray-50 px-4 py-2 rounded border hover:bg-gray-100 transition w-full justify-center">
+                                    <input type="radio" name="solicitouIndicacao" value="Não" onchange="toggleIndicacao(false)" checked class="text-gray-600 focus:ring-gray-500"> 
+                                    <span class="font-semibold text-gray-700">NÃO</span>
                                 </label>
                             </div>
                         </div>
 
-                        <div id="div-motivo-recusa" class="animate-fade-in flex-grow">
-                            <label for="motivoRecusa" class="text-red-800 font-medium">Motivo da Recusa</label>
-                            <textarea id="motivoRecusa" rows="4" class="w-full p-2 border border-red-200 bg-red-50 rounded focus:ring-red-500 focus:border-red-500 text-sm" placeholder="Explique por que o cliente não aceitou..."></textarea>
+                        <div id="div-resposta-indicacao" class="hidden animate-fade-in flex-grow">
+                            <label for="respostaIndicacao" class="block text-sm font-bold text-red-800 mb-1">Qual foi a resposta?</label>
+                            <select id="respostaIndicacao" onchange="toggleIndicacaoOutro()" class="w-full p-2 border border-red-200 rounded focus:ring-red-500 focus:border-red-500 bg-white text-sm mb-2">
+                                <option value="">Selecione...</option>
+                                <option value="Informou não ter indicação">Informou não ter indicação</option>
+                                <option value="Informou ter indicação mas não passou os dados no momento">Informou ter indicação mas não passou os dados no momento</option>
+                                <option value="Passou dados da indicação">Passou dados da indicação</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+
+                            <div id="div-indicacao-outro" class="hidden animate-fade-in">
+                                <input type="text" id="indicacaoOutroTexto" placeholder="Digite a resposta do cliente..." class="w-full p-2 border border-red-300 rounded focus:ring-red-500 focus:border-red-500 text-sm">
+                            </div>
                         </div>
-                        <div id="div-motivo-spacer" class="hidden flex-grow"></div>
                     </div>
 
-                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-8 border-t-4 border-gray-500">
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-8 border-t-4 border-red-500">
                         <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
-                            <i data-lucide="clipboard-list" class="w-4 h-4 text-gray-500"></i> Pontos de Análise
+                            <i data-lucide="clipboard-list" class="w-4 h-4 text-red-500"></i> Pontos de Análise
                         </h2>
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div class="md:col-span-2">
@@ -179,24 +188,24 @@
                         </div>
                     </div>
 
-                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-4 border-t-4 border-green-500 flex flex-col">
+                    <div class="bg-white p-5 rounded-lg shadow lg:col-span-4 border-t-4 border-red-500 flex flex-col">
                         <h2 class="text-base font-bold border-b pb-2 mb-3 text-gray-700 flex items-center gap-2">
-                            <i data-lucide="headset" class="w-4 h-4 text-green-600"></i> Detalhes do Atendimento
+                            <i data-lucide="headset" class="w-4 h-4 text-red-600"></i> Detalhes do Atendimento
                         </h2>
                         <div class="space-y-4 flex-grow">
                             <div>
                                 <label for="nomeAtendente">Operador / Atendente</label>
-                                <input type="text" id="nomeAtendente" class="w-full p-2 border border-gray-300 rounded focus:ring-green-500 focus:border-green-500 text-sm">
+                                <input type="text" id="nomeAtendente" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 text-sm">
                             </div>
                             <div>
                                 <label for="dataUltimoAtendimento">Data do Último Atendimento</label>
-                                <input type="date" id="dataUltimoAtendimento" class="w-full p-2 border border-gray-300 rounded focus:ring-green-500 focus:border-green-500 text-sm">
+                                <input type="date" id="dataUltimoAtendimento" class="w-full p-2 border border-gray-300 rounded focus:ring-red-500 focus:border-red-500 text-sm">
                             </div>
                         </div>
                     </div>
 
                     <div class="lg:col-span-12 flex flex-col sm:flex-row gap-4 pt-4 pb-12">
-                        <button type="button" onclick="copyScript()" class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg shadow flex justify-center items-center gap-2 transition transform hover:scale-[1.01]">
+                        <button type="button" onclick="copyScript()" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-lg shadow flex justify-center items-center gap-2 transition transform hover:scale-[1.01]">
                             <i data-lucide="copy"></i> Copiar Script
                         </button>
                         <button type="button" onclick="resetForm()" class="sm:w-auto bg-gray-200 hover:bg-gray-300 text-gray-700 font-semibold py-3 px-6 rounded-lg shadow flex justify-center items-center gap-2 transition">
@@ -215,17 +224,27 @@
         lucide.createIcons();
 
         // --- Visibilidade ---
-        function toggleRecusa(show) {
-            const divRecusa = document.getElementById('div-motivo-recusa');
-            const divSpacer = document.getElementById('div-motivo-spacer');
+        function toggleIndicacao(show) {
+            const divResposta = document.getElementById('div-resposta-indicacao');
             
             if (show) {
-                divRecusa.classList.remove('hidden');
-                divSpacer.classList.add('hidden');
+                divResposta.classList.remove('hidden');
             } else {
-                divRecusa.classList.add('hidden');
-                divSpacer.classList.remove('hidden'); // Mantém layout se necessário
-                document.getElementById('motivoRecusa').value = '';
+                divResposta.classList.add('hidden');
+                document.getElementById('respostaIndicacao').value = '';
+                document.getElementById('indicacaoOutroTexto').value = '';
+                toggleIndicacaoOutro(); // Esconde o campo outro
+            }
+        }
+
+        function toggleIndicacaoOutro() {
+            const val = document.getElementById('respostaIndicacao').value;
+            const divOutro = document.getElementById('div-indicacao-outro');
+            if (val === 'Outro') {
+                divOutro.classList.remove('hidden');
+            } else {
+                divOutro.classList.add('hidden');
+                document.getElementById('indicacaoOutroTexto').value = '';
             }
         }
 
@@ -258,8 +277,9 @@
                 avaliacaoAtendimento: document.getElementById('avaliacaoAtendimento').value,
                 sugestoes: document.getElementById('sugestoes').value,
                 
-                aceitouGoogle: document.querySelector('input[name="aceitouGoogle"]:checked').value,
-                motivoRecusa: document.getElementById('motivoRecusa').value,
+                solicitouIndicacao: document.querySelector('input[name="solicitouIndicacao"]:checked').value,
+                respostaIndicacao: document.getElementById('respostaIndicacao').value,
+                indicacaoOutroTexto: document.getElementById('indicacaoOutroTexto').value,
                 
                 nomeAtendente: document.getElementById('nomeAtendente').value,
                 dataUltimoAtendimento: document.getElementById('dataUltimoAtendimento').value
@@ -281,16 +301,20 @@
                 setVal('conexaoEstabilidade', data.conexaoEstabilidade);
                 setVal('avaliacaoAtendimento', data.avaliacaoAtendimento);
                 setVal('sugestoes', data.sugestoes);
-                setVal('motivoRecusa', data.motivoRecusa);
                 setVal('nomeAtendente', data.nomeAtendente);
                 setVal('dataUltimoAtendimento', data.dataUltimoAtendimento);
 
-                if (data.aceitouGoogle) {
-                    const el = document.querySelector(`input[name="aceitouGoogle"][value="${data.aceitouGoogle}"]`);
+                // Indicação
+                if (data.solicitouIndicacao) {
+                    const el = document.querySelector(`input[name="solicitouIndicacao"][value="${data.solicitouIndicacao}"]`);
                     if(el) el.checked = true;
                 }
+                setVal('respostaIndicacao', data.respostaIndicacao);
+                setVal('indicacaoOutroTexto', data.indicacaoOutroTexto);
 
-                toggleRecusa(data.aceitouGoogle === 'Não');
+                // UI Updates
+                toggleIndicacao(data.solicitouIndicacao === 'Sim');
+                toggleIndicacaoOutro();
 
             } catch(e) { console.error("Erro ao carregar", e); }
         }
@@ -326,9 +350,12 @@
             check('avaliacaoAtendimento');
             check('nomeAtendente');
 
-            // Se recusou, motivo é obrigatório
-            if (document.querySelector('input[name="aceitouGoogle"]:checked').value === 'Não') {
-                check('motivoRecusa', 'div-motivo-recusa');
+            // Validação de Indicação
+            if (document.querySelector('input[name="solicitouIndicacao"]:checked').value === 'Sim') {
+                check('respostaIndicacao', 'div-resposta-indicacao');
+                if (document.getElementById('respostaIndicacao').value === 'Outro') {
+                    check('indicacaoOutroTexto', 'div-indicacao-outro');
+                }
             }
 
             if (!isValid) {
@@ -349,10 +376,15 @@
             const avaliacao = document.getElementById('avaliacaoAtendimento').value;
             const sugestoes = document.getElementById('sugestoes').value;
             
-            const aceitouGoogle = document.querySelector('input[name="aceitouGoogle"]:checked').value;
-            let textoGoogle = `Cliente aceitou link Google? ${aceitouGoogle}`;
-            if (aceitouGoogle === 'Não') {
-                textoGoogle += `\n   - Motivo: ${document.getElementById('motivoRecusa').value}`;
+            const solicitou = document.querySelector('input[name="solicitouIndicacao"]:checked').value;
+            let textoIndicacao = `Solicitou Indicação? ${solicitou}`;
+            
+            if (solicitou === 'Sim') {
+                let resp = document.getElementById('respostaIndicacao').value;
+                if (resp === 'Outro') {
+                    resp = document.getElementById('indicacaoOutroTexto').value;
+                }
+                textoIndicacao += `\n   - Resposta: ${resp}`;
             }
 
             const atendente = document.getElementById('nomeAtendente').value;
@@ -371,8 +403,8 @@ Conexão/Estabilidade: ${conexao}
 Avaliação de atendimento: ${avaliacao}
 Sugestões/Melhoria: ${sugestoes}
 
-=== AVALIAÇÃO DO GOOGLE ===
-${textoGoogle}
+=== INDICAÇÃO ===
+${textoIndicacao}
 
 === DETALHES DO ATENDIMENTO ===
 Atendente: ${atendente}
@@ -396,10 +428,7 @@ Atendente: ${atendente}
                 document.getElementById('nomeAtendente').value = atendente;
 
                 // Reset visual
-                toggleRecusa(true); // O reset padrao coloca o radio no checked inicial? Se HTML checked="checked" no Não, sim.
-                // Mas vamos garantir estado padrao do HTML:
-                // O HTML tem checked no 'Não'.
-                toggleRecusa(true); 
+                toggleIndicacao(false);
 
                 document.querySelectorAll('.border-red-500').forEach(e => e.classList.remove('border-red-500', 'ring-1', 'ring-red-500'));
                 saveState();
